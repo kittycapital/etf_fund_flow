@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETF Fund Flow Tracker | HerdVibe</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #16161f;
+  --bg-hover: #1e1e2a;
+  --border: #2a2a3a;
+  --text-primary: #e8e8f0;
+  --text-secondary: #8888a0;
+  --text-muted: #55556a;
+  --accent-blue: #4a9eff;
+  --accent-green: #22c55e;
+  --accent-red: #ef4444;
+  --accent-orange: #f59e0b;
+  --accent-purple: #a855f7;
+  --flow-positive: rgba(34, 197, 94, 0.35);
+  --flow-negative: rgba(239, 68, 68, 0.35);
+  --divergence-bull: rgba(34, 197, 94, 0.12);
+  --divergence-bear: rgba(239, 68, 68, 0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  letter-spacing: 1px;
+}
+
+.header h1 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.header-right {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-group label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.control-group select {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.control-group select:hover {
+  border-color: var(--accent-blue);
+}
+
+.control-group select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.15);
+}
+
+/* Rolling Window Buttons */
+.window-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.window-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 8px 14px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.window-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.window-btn.active {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+}
+
+/* Info Bar */
+.info-bar {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-item .label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item .value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.info-item .value.positive { color: var(--accent-green); }
+.info-item .value.negative { color: var(--accent-red); }
+
+/* Divergence Alert */
+.divergence-alert {
+  display: none;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  align-items: center;
+  gap: 8px;
+}
+
+.divergence-alert.bullish {
+  display: flex;
+  background: var(--divergence-bull);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--accent-green);
+}
+
+.divergence-alert.bearish {
+  display: flex;
+  background: var(--divergence-bear);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--accent-red);
+}
+
+.divergence-alert .icon { font-size: 16px; }
+
+/* Chart Container */
+.chart-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.chart-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-title .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.chart-title .dot.blue { background: var(--accent-blue); }
+.chart-title .dot.green { background: var(--accent-green); }
+.chart-title .dot.orange { background: var(--accent-orange); }
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+}
+
+/* Legend */
+.flow-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.flow-legend span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flow-legend .box {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.flow-legend .box.inflow { background: var(--flow-positive); border: 1px solid var(--accent-green); }
+.flow-legend .box.outflow { background: var(--flow-negative); border: 1px solid var(--accent-red); }
+
+/* Data method note */
+.data-note {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.data-note strong {
+  color: var(--text-secondary);
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.loading .spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error */
+.error-msg {
+  padding: 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: var(--accent-red);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Footer */
+.footer {
+  margin-top: 32px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 12px; }
+  .header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .controls { flex-direction: column; }
+  .control-group select { min-width: 100%; }
+  .window-buttons { flex-wrap: wrap; }
+  .info-bar { flex-direction: column; gap: 12px; }
+  .chart-wrapper { height: 220px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <span class="logo">HERDVIBE</span>
+      <h1>ETF Fund Flow Tracker</h1>
+    </div>
+    <div class="header-right" id="lastUpdated">Loading...</div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="control-group">
+      <label>카테고리</label>
+      <select id="categorySelect">
+        <option value="all">전체</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>ETF</label>
+      <select id="tickerSelect"></select>
+    </div>
+    <div class="control-group">
+      <label>Rolling Window</label>
+      <div class="window-buttons" id="windowButtons">
+        <button class="window-btn" data-days="10">2주</button>
+        <button class="window-btn" data-days="21">1개월</button>
+        <button class="window-btn active" data-days="63">3개월</button>
+        <button class="window-btn" data-days="126">6개월</button>
+        <button class="window-btn" data-days="252">1년</button>
+        <button class="window-btn" data-days="756">3년</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Bar -->
+  <div class="info-bar" id="infoBar">
+    <div class="info-item">
+      <span class="label">현재가</span>
+      <span class="value" id="infoPrice">-</span>
+    </div>
+    <div class="info-item">
+      <span class="label">일간 변동</span>
+      <span class="value" id="infoDayChange">-</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Fund Flow (현재 윈도우)</span>
+      <span class="value" id="infoFlow">-</span>
+    </div>
+    <div class="info-item">
+      <span class="label">데이터 기간</span>
+      <span class="value" id="infoRange">-</span>
+    </div>
+  </div>
+
+  <!-- Divergence Alert -->
+  <div class="divergence-alert" id="divergenceAlert">
+    <span class="icon"></span>
+    <span id="divergenceText"></span>
+  </div>
+
+  <!-- Price Chart -->
+  <div class="chart-section">
+    <div class="chart-title">
+      <span class="dot blue"></span>
+      <span id="priceChartTitle">가격</span>
+    </div>
+    <div class="chart-wrapper">
+      <canvas id="priceChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Fund Flow Chart -->
+  <div class="chart-section">
+    <div class="chart-title">
+      <span class="dot green"></span>
+      <span id="flowChartTitle">Estimated Fund Flow (Rolling Sum)</span>
+    </div>
+    <div class="chart-wrapper">
+      <canvas id="flowChart"></canvas>
+    </div>
+    <div class="flow-legend">
+      <span><span class="box inflow"></span> 순유입 (Inflow)</span>
+      <span><span class="box outflow"></span> 순유출 (Outflow)</span>
+    </div>
+  </div>
+
+  <!-- Data Note -->
+  <div class="data-note">
+    <strong>📊 Fund Flow 추정 방식:</strong> Shares Outstanding 히스토리가 충분히 쌓이면 <code>ΔShares × Price</code>로 계산합니다.
+    초기에는 거래량 기반 Money Flow Proxy <code>(Volume × Price Direction)</code>를 사용합니다.
+    Divergence 감지는 가격과 fund flow의 rolling 방향이 반대일 때 표시됩니다.
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    HerdVibe · ETF Fund Flow Tracker · Data from Yahoo Finance
+  </div>
+</div>
+
+<script>
+// ============================================
+// ETF CONFIG
+// ============================================
+const ETF_LIST = {
+  "미국 대표 지수": { SPY: "S&P 500", QQQ: "나스닥 100", DIA: "다우", IWM: "러셀 2000" },
+  "섹터": { XLF: "금융", XLE: "에너지", XLK: "기술", XLV: "헬스케어", IGV: "소프트웨어", SMH: "반도체", SOXX: "반도체", XBI: "바이오", ITB: "주택건설" },
+  "테마/성장": { ARKK: "혁신", HACK: "사이버보안", TAN: "태양광", LIT: "리튬/배터리", BOTZ: "로봇/AI" },
+  "커머디티": { GLD: "금", SLV: "은", USO: "원유", UNG: "천연가스", COPX: "구리", WEAT: "밀" },
+  "채권": { TLT: "미국 장기채", HYG: "하이일드", LQD: "투자등급 회사채", EMB: "신흥국 채권" },
+  "국가/지역": { EEM: "신흥국", FXI: "중국", EWJ: "일본", EWY: "한국", EWZ: "브라질", INDA: "인도" },
+  "변동성/헷지": { VXX: "VIX", UVXY: "VIX 2배" }
+};
+
+// ============================================
+// STATE
+// ============================================
+let currentTicker = "SPY";
+let currentWindow = 63;
+let priceData = null;
+let sharesData = null;
+let priceChart = null;
+let flowChart = null;
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener("DOMContentLoaded", () => {
+  initControls();
+  loadData(currentTicker);
+});
+
+function initControls() {
+  const catSelect = document.getElementById("categorySelect");
+  const tickerSelect = document.getElementById("tickerSelect");
+
+  // 카테고리 드롭다운
+  for (const cat of Object.keys(ETF_LIST)) {
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat;
+    catSelect.appendChild(opt);
+  }
+
+  catSelect.addEventListener("change", () => {
+    populateTickers(catSelect.value);
+    const firstTicker = tickerSelect.value;
+    if (firstTicker) loadData(firstTicker);
+  });
+
+  tickerSelect.addEventListener("change", () => {
+    loadData(tickerSelect.value);
+  });
+
+  // 초기 티커 리스트
+  populateTickers("all");
+
+  // Window 버튼
+  document.querySelectorAll(".window-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".window-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentWindow = parseInt(btn.dataset.days);
+      if (priceData) renderCharts();
+    });
+  });
+}
+
+function populateTickers(category) {
+  const tickerSelect = document.getElementById("tickerSelect");
+  tickerSelect.innerHTML = "";
+
+  if (category === "all") {
+    for (const [cat, tickers] of Object.entries(ETF_LIST)) {
+      const group = document.createElement("optgroup");
+      group.label = cat;
+      for (const [ticker, name] of Object.entries(tickers)) {
+        const opt = document.createElement("option");
+        opt.value = ticker;
+        opt.textContent = `${ticker} — ${name}`;
+        if (ticker === currentTicker) opt.selected = true;
+        group.appendChild(opt);
+      }
+      tickerSelect.appendChild(group);
+    }
+  } else {
+    const tickers = ETF_LIST[category] || {};
+    for (const [ticker, name] of Object.entries(tickers)) {
+      const opt = document.createElement("option");
+      opt.value = ticker;
+      opt.textContent = `${ticker} — ${name}`;
+      tickerSelect.appendChild(opt);
+    }
+  }
+}
+
+// ============================================
+// DATA LOADING
+// ============================================
+async function loadData(ticker) {
+  currentTicker = ticker;
+  
+  try {
+    // 가격 데이터 로드
+    const priceUrl = `data/prices/${ticker}.csv`;
+    const priceResp = await fetch(priceUrl);
+    
+    if (!priceResp.ok) {
+      showError(`${ticker}.csv 파일을 찾을 수 없습니다. bulk_download.py를 먼저 실행하세요.`);
+      return;
+    }
+    
+    const priceText = await priceResp.text();
+    const parsed = Papa.parse(priceText, { header: true, dynamicTyping: true, skipEmptyLines: true });
+    priceData = parsed.data.filter(d => d.Date && d.Close);
+
+    // Shares outstanding 로드 (있으면)
+    try {
+      const sharesResp = await fetch("data/shares_outstanding/daily_shares.csv");
+      if (sharesResp.ok) {
+        const sharesText = await sharesResp.text();
+        const sharesParsed = Papa.parse(sharesText, { header: true, dynamicTyping: true, skipEmptyLines: true });
+        sharesData = sharesParsed.data.filter(d => d.Date && d[ticker]);
+      }
+    } catch (e) {
+      sharesData = null;
+    }
+
+    // 마지막 업데이트 표시
+    if (priceData.length > 0) {
+      const lastDate = priceData[priceData.length - 1].Date;
+      document.getElementById("lastUpdated").textContent = `Last: ${lastDate}`;
+    }
+
+    renderCharts();
+
+  } catch (err) {
+    showError(`데이터 로드 실패: ${err.message}`);
+  }
+}
+
+function showError(msg) {
+  // 차트 영역에 에러 표시
+  console.error(msg);
+}
+
+// ============================================
+// FUND FLOW CALCULATION
+// ============================================
+function calculateFundFlow(data, windowSize) {
+  // 일별 money flow proxy 계산
+  // Method: Volume * sign(Close - PrevClose) * Close
+  // → 거래대금 방향성 (양수 = 가격 상승일 거래대금, 음수 = 하락일 거래대금)
+  
+  const dailyFlow = [];
+  
+  for (let i = 1; i < data.length; i++) {
+    const prev = data[i - 1];
+    const curr = data[i];
+    
+    const priceChange = curr.Close - prev.Close;
+    const direction = priceChange > 0 ? 1 : priceChange < 0 ? -1 : 0;
+    
+    // Money Flow = Volume × Close × Direction / 1e6 (백만 단위)
+    const flow = (curr.Volume * curr.Close * direction) / 1e6;
+    
+    dailyFlow.push({
+      date: curr.Date,
+      close: curr.Close,
+      volume: curr.Volume,
+      dailyFlow: flow
+    });
+  }
+  
+  // Rolling Sum 계산
+  const result = [];
+  for (let i = 0; i < dailyFlow.length; i++) {
+    let sum = 0;
+    const start = Math.max(0, i - windowSize + 1);
+    for (let j = start; j <= i; j++) {
+      sum += dailyFlow[j].dailyFlow;
+    }
+    
+    result.push({
+      ...dailyFlow[i],
+      rollingFlow: i >= windowSize - 1 ? sum : null
+    });
+  }
+  
+  return result;
+}
+
+// ============================================
+// DIVERGENCE DETECTION
+// ============================================
+function detectDivergence(flowData, lookback = 20) {
+  if (flowData.length < lookback * 2) return null;
+  
+  const recent = flowData.slice(-lookback);
+  const prev = flowData.slice(-lookback * 2, -lookback);
+  
+  const recentValid = recent.filter(d => d.rollingFlow !== null);
+  const prevValid = prev.filter(d => d.rollingFlow !== null);
+  
+  if (recentValid.length < 5 || prevValid.length < 5) return null;
+  
+  // 가격 방향
+  const priceStart = recentValid[0].close;
+  const priceEnd = recentValid[recentValid.length - 1].close;
+  const priceDirection = (priceEnd - priceStart) / priceStart;
+  
+  // Flow 방향
+  const flowStart = recentValid[0].rollingFlow;
+  const flowEnd = recentValid[recentValid.length - 1].rollingFlow;
+  const flowDirection = flowEnd - flowStart;
+  
+  const threshold = 0.02; // 2% 이상 변동일 때만
+  
+  if (Math.abs(priceDirection) < threshold) return null;
+  
+  // Bearish divergence: 가격 ↑ + Flow ↓
+  if (priceDirection > threshold && flowDirection < 0) {
+    return {
+      type: "bearish",
+      message: `⚠️ Bearish Divergence: 가격 +${(priceDirection * 100).toFixed(1)}% 상승 중이나 fund flow 감소 — 스마트머니 이탈 가능성`
+    };
+  }
+  
+  // Bullish divergence: 가격 ↓ + Flow ↑  
+  if (priceDirection < -threshold && flowDirection > 0) {
+    return {
+      type: "bullish",
+      message: `🔵 Bullish Divergence: 가격 ${(priceDirection * 100).toFixed(1)}% 하락 중이나 fund flow 증가 — 저가 매수 유입 가능성`
+    };
+  }
+  
+  return null;
+}
+
+// ============================================
+// CHART RENDERING
+// ============================================
+function renderCharts() {
+  if (!priceData || priceData.length === 0) return;
+  
+  const flowData = calculateFundFlow(priceData, currentWindow);
+  const validData = flowData.filter(d => d.rollingFlow !== null);
+  
+  if (validData.length === 0) return;
+  
+  // Update info bar
+  updateInfoBar(validData);
+  
+  // Detect divergence
+  updateDivergence(validData);
+  
+  // Get window label
+  const windowLabel = document.querySelector(".window-btn.active")?.textContent || "";
+  
+  // Chart labels (dates)
+  const labels = validData.map(d => d.date);
+  const prices = validData.map(d => d.close);
+  const flows = validData.map(d => d.rollingFlow);
+  
+  // Thin out labels for readability
+  const maxLabels = 40;
+  const step = Math.max(1, Math.floor(labels.length / maxLabels));
+  const displayLabels = labels.map((l, i) => i % step === 0 ? l : "");
+  
+  // Colors for flow bars
+  const flowBgColors = flows.map(f => f >= 0 ? "rgba(34, 197, 94, 0.4)" : "rgba(239, 68, 68, 0.4)");
+  const flowBorderColors = flows.map(f => f >= 0 ? "rgba(34, 197, 94, 0.8)" : "rgba(239, 68, 68, 0.8)");
+  
+  // ---- Price Chart ----
+  const tickerName = findTickerName(currentTicker);
+  document.getElementById("priceChartTitle").textContent = `${currentTicker} (${tickerName}) — 가격`;
+  
+  if (priceChart) priceChart.destroy();
+  
+  const priceCtx = document.getElementById("priceChart").getContext("2d");
+  priceChart = new Chart(priceCtx, {
+    type: "line",
+    data: {
+      labels: displayLabels,
+      datasets: [{
+        data: prices,
+        borderColor: "#4a9eff",
+        borderWidth: 1.5,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        tension: 0,
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          backgroundColor: "#1e1e2a",
+          titleColor: "#8888a0",
+          bodyColor: "#e8e8f0",
+          borderColor: "#2a2a3a",
+          borderWidth: 1,
+          titleFont: { family: "'JetBrains Mono'" },
+          bodyFont: { family: "'JetBrains Mono'" },
+          callbacks: {
+            title: (items) => labels[items[0].dataIndex],
+            label: (item) => `$${item.raw.toFixed(2)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: "rgba(42, 42, 58, 0.5)", drawBorder: false },
+          ticks: {
+            color: "#55556a",
+            font: { family: "'JetBrains Mono'", size: 10 },
+            maxRotation: 0
+          }
+        },
+        y: {
+          position: "right",
+          grid: { color: "rgba(42, 42, 58, 0.5)", drawBorder: false },
+          ticks: {
+            color: "#55556a",
+            font: { family: "'JetBrains Mono'", size: 10 },
+            callback: v => "$" + v.toFixed(0)
+          }
+        }
+      },
+      interaction: { mode: "index", intersect: false }
+    }
+  });
+  
+  // ---- Flow Chart ----
+  document.getElementById("flowChartTitle").textContent = `Estimated Fund Flow — Rolling ${windowLabel} Sum (백만$)`;
+  
+  if (flowChart) flowChart.destroy();
+  
+  const flowCtx = document.getElementById("flowChart").getContext("2d");
+  flowChart = new Chart(flowCtx, {
+    type: "bar",
+    data: {
+      labels: displayLabels,
+      datasets: [{
+        data: flows,
+        backgroundColor: flowBgColors,
+        borderColor: flowBorderColors,
+        borderWidth: 1,
+        barPercentage: 1.0,
+        categoryPercentage: 1.0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          backgroundColor: "#1e1e2a",
+          titleColor: "#8888a0",
+          bodyColor: "#e8e8f0",
+          borderColor: "#2a2a3a",
+          borderWidth: 1,
+          titleFont: { family: "'JetBrains Mono'" },
+          bodyFont: { family: "'JetBrains Mono'" },
+          callbacks: {
+            title: (items) => labels[items[0].dataIndex],
+            label: (item) => {
+              const val = item.raw;
+              const sign = val >= 0 ? "+" : "";
+              return `${sign}${val.toFixed(1)}M`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: "rgba(42, 42, 58, 0.5)", drawBorder: false },
+          ticks: {
+            color: "#55556a",
+            font: { family: "'JetBrains Mono'", size: 10 },
+            maxRotation: 0
+          }
+        },
+        y: {
+          position: "right",
+          grid: { color: "rgba(42, 42, 58, 0.5)", drawBorder: false },
+          ticks: {
+            color: "#55556a",
+            font: { family: "'JetBrains Mono'", size: 10 },
+            callback: v => v.toFixed(0) + "M"
+          }
+        }
+      },
+      interaction: { mode: "index", intersect: false }
+    }
+  });
+}
+
+// ============================================
+// UI HELPERS
+// ============================================
+function updateInfoBar(data) {
+  if (!data || data.length < 2) return;
+  
+  const last = data[data.length - 1];
+  const prev = data[data.length - 2];
+  const first = data[0];
+  
+  const dayChange = last.close - prev.close;
+  const dayChangePct = (dayChange / prev.close) * 100;
+  
+  document.getElementById("infoPrice").textContent = `$${last.close.toFixed(2)}`;
+  
+  const dayEl = document.getElementById("infoDayChange");
+  const sign = dayChange >= 0 ? "+" : "";
+  dayEl.textContent = `${sign}${dayChange.toFixed(2)} (${sign}${dayChangePct.toFixed(2)}%)`;
+  dayEl.className = `value ${dayChange >= 0 ? "positive" : "negative"}`;
+  
+  const flowEl = document.getElementById("infoFlow");
+  const flowSign = last.rollingFlow >= 0 ? "+" : "";
+  flowEl.textContent = `${flowSign}${last.rollingFlow.toFixed(1)}M`;
+  flowEl.className = `value ${last.rollingFlow >= 0 ? "positive" : "negative"}`;
+  
+  document.getElementById("infoRange").textContent = `${first.date} ~ ${last.date}`;
+}
+
+function updateDivergence(data) {
+  const alert = document.getElementById("divergenceAlert");
+  const text = document.getElementById("divergenceText");
+  
+  const div = detectDivergence(data);
+  
+  if (div) {
+    alert.className = `divergence-alert ${div.type === "bearish" ? "bearish" : "bullish"}`;
+    text.textContent = div.message;
+  } else {
+    alert.className = "divergence-alert";
+    alert.style.display = "none";
+  }
+}
+
+function findTickerName(ticker) {
+  for (const tickers of Object.values(ETF_LIST)) {
+    if (tickers[ticker]) return tickers[ticker];
+  }
+  return ticker;
+}
+</script>
+</body>
+</html>
