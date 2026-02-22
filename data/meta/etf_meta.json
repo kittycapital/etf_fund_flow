@@ -1,0 +1,239 @@
+{
+  "etf_list": {
+    "미국 대표 지수": {
+      "SPY": "S&P 500",
+      "QQQ": "나스닥 100",
+      "DIA": "다우",
+      "IWM": "러셀 2000"
+    },
+    "섹터": {
+      "XLF": "금융",
+      "XLE": "에너지",
+      "XLK": "기술",
+      "XLV": "헬스케어",
+      "IGV": "소프트웨어",
+      "SMH": "반도체",
+      "SOXX": "반도체",
+      "XBI": "바이오",
+      "ITB": "주택건설"
+    },
+    "테마/성장": {
+      "ARKK": "혁신",
+      "HACK": "사이버보안",
+      "TAN": "태양광",
+      "LIT": "리튬/배터리",
+      "BOTZ": "로봇/AI"
+    },
+    "커머디티": {
+      "GLD": "금",
+      "SLV": "은",
+      "USO": "원유",
+      "UNG": "천연가스",
+      "COPX": "구리",
+      "WEAT": "밀"
+    },
+    "채권": {
+      "TLT": "미국 장기채",
+      "HYG": "하이일드",
+      "LQD": "투자등급 회사채",
+      "EMB": "신흥국 채권"
+    },
+    "국가/지역": {
+      "EEM": "신흥국",
+      "FXI": "중국",
+      "EWJ": "일본",
+      "EWY": "한국",
+      "EWZ": "브라질",
+      "INDA": "인도"
+    },
+    "변동성/헷지": {
+      "VXX": "VIX",
+      "UVXY": "VIX 2배"
+    }
+  },
+  "ticker_info": {
+    "SPY": {
+      "category": "미국 대표 지수",
+      "name_kr": "S&P 500"
+    },
+    "QQQ": {
+      "category": "미국 대표 지수",
+      "name_kr": "나스닥 100"
+    },
+    "DIA": {
+      "category": "미국 대표 지수",
+      "name_kr": "다우"
+    },
+    "IWM": {
+      "category": "미국 대표 지수",
+      "name_kr": "러셀 2000"
+    },
+    "XLF": {
+      "category": "섹터",
+      "name_kr": "금융"
+    },
+    "XLE": {
+      "category": "섹터",
+      "name_kr": "에너지"
+    },
+    "XLK": {
+      "category": "섹터",
+      "name_kr": "기술"
+    },
+    "XLV": {
+      "category": "섹터",
+      "name_kr": "헬스케어"
+    },
+    "IGV": {
+      "category": "섹터",
+      "name_kr": "소프트웨어"
+    },
+    "SMH": {
+      "category": "섹터",
+      "name_kr": "반도체"
+    },
+    "SOXX": {
+      "category": "섹터",
+      "name_kr": "반도체"
+    },
+    "XBI": {
+      "category": "섹터",
+      "name_kr": "바이오"
+    },
+    "ITB": {
+      "category": "섹터",
+      "name_kr": "주택건설"
+    },
+    "ARKK": {
+      "category": "테마/성장",
+      "name_kr": "혁신"
+    },
+    "HACK": {
+      "category": "테마/성장",
+      "name_kr": "사이버보안"
+    },
+    "TAN": {
+      "category": "테마/성장",
+      "name_kr": "태양광"
+    },
+    "LIT": {
+      "category": "테마/성장",
+      "name_kr": "리튬/배터리"
+    },
+    "BOTZ": {
+      "category": "테마/성장",
+      "name_kr": "로봇/AI"
+    },
+    "GLD": {
+      "category": "커머디티",
+      "name_kr": "금"
+    },
+    "SLV": {
+      "category": "커머디티",
+      "name_kr": "은"
+    },
+    "USO": {
+      "category": "커머디티",
+      "name_kr": "원유"
+    },
+    "UNG": {
+      "category": "커머디티",
+      "name_kr": "천연가스"
+    },
+    "COPX": {
+      "category": "커머디티",
+      "name_kr": "구리"
+    },
+    "WEAT": {
+      "category": "커머디티",
+      "name_kr": "밀"
+    },
+    "TLT": {
+      "category": "채권",
+      "name_kr": "미국 장기채"
+    },
+    "HYG": {
+      "category": "채권",
+      "name_kr": "하이일드"
+    },
+    "LQD": {
+      "category": "채권",
+      "name_kr": "투자등급 회사채"
+    },
+    "EMB": {
+      "category": "채권",
+      "name_kr": "신흥국 채권"
+    },
+    "EEM": {
+      "category": "국가/지역",
+      "name_kr": "신흥국"
+    },
+    "FXI": {
+      "category": "국가/지역",
+      "name_kr": "중국"
+    },
+    "EWJ": {
+      "category": "국가/지역",
+      "name_kr": "일본"
+    },
+    "EWY": {
+      "category": "국가/지역",
+      "name_kr": "한국"
+    },
+    "EWZ": {
+      "category": "국가/지역",
+      "name_kr": "브라질"
+    },
+    "INDA": {
+      "category": "국가/지역",
+      "name_kr": "인도"
+    },
+    "VXX": {
+      "category": "변동성/헷지",
+      "name_kr": "VIX"
+    },
+    "UVXY": {
+      "category": "변동성/헷지",
+      "name_kr": "VIX 2배"
+    }
+  },
+  "all_tickers": [
+    "SPY",
+    "QQQ",
+    "DIA",
+    "IWM",
+    "XLF",
+    "XLE",
+    "XLK",
+    "XLV",
+    "IGV",
+    "SMH",
+    "SOXX",
+    "XBI",
+    "ITB",
+    "ARKK",
+    "HACK",
+    "TAN",
+    "LIT",
+    "BOTZ",
+    "GLD",
+    "SLV",
+    "USO",
+    "UNG",
+    "COPX",
+    "WEAT",
+    "TLT",
+    "HYG",
+    "LQD",
+    "EMB",
+    "EEM",
+    "FXI",
+    "EWJ",
+    "EWY",
+    "EWZ",
+    "INDA",
+    "VXX",
+    "UVXY"
+  ],
+  "last_updated": "2026-02-22T23:02:47.052297+00:00"
+}
