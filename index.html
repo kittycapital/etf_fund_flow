@@ -23,7 +23,6 @@
   --accent-cyan: #22d3ee;
   --accent-green: #22c55e;
   --accent-red: #ef4444;
-  --accent-orange: #f59e0b;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,324 +37,108 @@ body {
   min-height: 100vh;
 }
 
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
-}
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
 
-/* Header */
 .header {
   text-align: center;
   padding: 30px 0 20px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 24px;
 }
+.header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.header .subtitle { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 6px; }
 
-.header h1 {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.5px;
-}
-
-.header .subtitle {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 6px;
-}
-
-/* Controls */
 .controls {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: center;
+  display: flex; gap: 16px; margin-bottom: 24px;
+  flex-wrap: wrap; align-items: flex-end; justify-content: center;
 }
-
-.control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
+.control-group { display: flex; flex-direction: column; gap: 6px; }
 .control-group label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-align: center;
+  font-size: 11px; font-weight: 500; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.5px; text-align: center;
 }
-
 .control-group select {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  padding: 8px 12px;
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  min-width: 180px;
-  -webkit-appearance: none;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  padding: 8px 12px; background: var(--bg-card); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 6px; cursor: pointer; min-width: 180px;
 }
+.control-group select:focus { outline: none; border-color: var(--accent-cyan); }
 
-.control-group select:focus {
-  outline: none;
-  border-color: var(--accent-cyan);
-}
-
-/* Window Buttons */
-.window-buttons {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-}
-
+.window-buttons { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
 .window-btn {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  padding: 8px 14px;
-  background: var(--bg-card);
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  padding: 8px 14px; background: var(--bg-card); color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.15s;
 }
+.window-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.window-btn.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); font-weight: 600; }
 
-.window-btn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-}
-
-.window-btn.active {
-  background: var(--accent-cyan);
-  color: #000;
-  border-color: var(--accent-cyan);
-  font-weight: 600;
-}
-
-/* Info Bar */
 .info-bar {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 20px;
-  padding: 12px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: flex; gap: 24px; margin-bottom: 20px; padding: 12px 16px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  flex-wrap: wrap; justify-content: center;
 }
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: center;
-}
-
-.info-item .label {
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.info-item .value {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  font-weight: 500;
-}
-
+.info-item { display: flex; flex-direction: column; gap: 2px; align-items: center; }
+.info-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.info-item .value { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; }
 .info-item .value.positive { color: var(--accent-green); }
 .info-item .value.negative { color: var(--accent-red); }
 
-/* Divergence Alert */
 .divergence-alert {
-  display: none;
-  margin-bottom: 16px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
+  display: none; margin-bottom: 16px; padding: 10px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; align-items: center; gap: 8px; justify-content: center;
 }
+.divergence-alert.bullish { display: flex; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); color: var(--accent-green); }
+.divergence-alert.bearish { display: flex; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: var(--accent-red); }
 
-.divergence-alert.bullish {
-  display: flex;
-  background: rgba(34, 197, 94, 0.08);
-  border: 1px solid rgba(34, 197, 94, 0.25);
-  color: var(--accent-green);
-}
-
-.divergence-alert.bearish {
-  display: flex;
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: var(--accent-red);
-}
-
-/* Chart Section */
-.chart-section {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-.chart-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.chart-title .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
+.chart-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+.chart-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.chart-title .dot { width: 8px; height: 8px; border-radius: 50%; }
 .chart-title .dot.cyan { background: var(--accent-cyan); }
 .chart-title .dot.green { background: var(--accent-green); }
+.chart-wrapper { position: relative; height: 300px; }
 
-.chart-wrapper {
-  position: relative;
-  height: 300px;
-}
+.flow-legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--text-muted); justify-content: center; }
+.flow-legend span { display: flex; align-items: center; gap: 4px; }
+.flow-legend .box { width: 12px; height: 12px; border-radius: 2px; }
+.flow-legend .box.inflow { background: rgba(34,197,94,0.4); border: 1px solid var(--accent-green); }
+.flow-legend .box.outflow { background: rgba(239,68,68,0.4); border: 1px solid var(--accent-red); }
 
-/* Flow Legend */
-.flow-legend {
-  display: flex;
-  gap: 16px;
-  margin-top: 8px;
-  font-size: 11px;
-  color: var(--text-muted);
-  justify-content: center;
-}
-
-.flow-legend span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.flow-legend .box {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-}
-
-.flow-legend .box.inflow { background: rgba(34, 197, 94, 0.4); border: 1px solid var(--accent-green); }
-.flow-legend .box.outflow { background: rgba(239, 68, 68, 0.4); border: 1px solid var(--accent-red); }
-
-/* Share Buttons */
-.share-group {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin: 20px 0;
-}
-
+.share-group { display: flex; justify-content: center; gap: 8px; margin: 20px 0; }
 .share-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--bg-card);
-  color: var(--text-secondary);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px;
+  border: 1px solid var(--border); border-radius: 20px; background: var(--bg-card);
+  color: var(--text-secondary); font-family: 'Noto Sans KR', sans-serif; font-size: 12px;
+  cursor: pointer; transition: all 0.15s; text-decoration: none;
 }
-
-.share-btn:hover {
-  border-color: var(--text-secondary);
-  color: var(--text-primary);
-}
-
-.share-btn svg {
-  width: 14px;
-  height: 14px;
-  fill: currentColor;
-}
-
+.share-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+.share-btn svg { width: 14px; height: 14px; fill: currentColor; }
 .share-btn.twitter:hover { color: #1da1f2; border-color: #1da1f2; }
 .share-btn.kakao:hover { color: #fee500; border-color: #fee500; }
 .share-btn.telegram:hover { color: #26a5e4; border-color: #26a5e4; }
 .share-btn.instagram:hover { color: #e4405f; border-color: #e4405f; }
 .share-btn.copy:hover { color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-/* Toast */
 .toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: #222;
-  color: #fff;
-  padding: 10px 24px;
-  border-radius: 8px;
-  font-size: 13px;
-  z-index: 9999;
-  opacity: 0;
-  transition: all 0.3s;
-  pointer-events: none;
-  white-space: nowrap;
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: #222; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px;
+  z-index: 9999; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap;
 }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-/* Data Note */
 .data-note {
-  margin-top: 20px;
-  padding: 12px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1.6;
-  text-align: center;
+  margin-top: 20px; padding: 12px 16px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 8px; font-size: 11px;
+  color: var(--text-muted); line-height: 1.6; text-align: center;
 }
-
 .data-note strong { color: var(--text-secondary); }
 
-/* Footer */
-.footer {
-  margin-top: 32px;
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  font-size: 11px;
-  color: var(--text-muted);
-}
+.footer { margin-top: 32px; padding: 16px 0; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--text-muted); }
 
-/* Responsive */
 @media (max-width: 768px) {
   .container { padding: 12px; }
   .controls { flex-direction: column; align-items: center; }
   .control-group select { min-width: 100%; }
-  .window-buttons { flex-wrap: wrap; }
   .info-bar { flex-direction: column; gap: 12px; }
   .chart-wrapper { height: 220px; }
   .share-group { flex-wrap: wrap; }
@@ -365,133 +148,86 @@ body {
 </head>
 <body>
 <div class="container">
-
-  <!-- Header -->
   <div class="header">
     <h1>ETF 자금 유입 트래커</h1>
     <div class="subtitle" id="lastUpdated">Loading...</div>
   </div>
 
-  <!-- Controls -->
   <div class="controls">
     <div class="control-group">
       <label>카테고리</label>
-      <select id="categorySelect">
-        <option value="all">전체</option>
-      </select>
+      <select id="categorySelect"><option value="all">전체</option></select>
     </div>
     <div class="control-group">
       <label>ETF</label>
       <select id="tickerSelect"></select>
     </div>
     <div class="control-group">
-      <label>Rolling Window</label>
-      <div class="window-buttons" id="windowButtons">
+      <label>기간</label>
+      <div class="window-buttons">
         <button class="window-btn" data-days="10">2주</button>
         <button class="window-btn" data-days="21">1개월</button>
         <button class="window-btn active" data-days="63">3개월</button>
         <button class="window-btn" data-days="126">6개월</button>
         <button class="window-btn" data-days="252">1년</button>
         <button class="window-btn" data-days="756">3년</button>
+        <button class="window-btn" data-days="1260">5년</button>
+        <button class="window-btn" data-days="0">ALL</button>
       </div>
     </div>
   </div>
 
-  <!-- Info Bar -->
   <div class="info-bar">
-    <div class="info-item">
-      <span class="label">현재가</span>
-      <span class="value" id="infoPrice">-</span>
-    </div>
-    <div class="info-item">
-      <span class="label">일간 변동</span>
-      <span class="value" id="infoDayChange">-</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Fund Flow (현재 윈도우)</span>
-      <span class="value" id="infoFlow">-</span>
-    </div>
-    <div class="info-item">
-      <span class="label">데이터 기간</span>
-      <span class="value" id="infoRange">-</span>
-    </div>
+    <div class="info-item"><span class="label">현재가</span><span class="value" id="infoPrice">-</span></div>
+    <div class="info-item"><span class="label">일간 변동</span><span class="value" id="infoDayChange">-</span></div>
+    <div class="info-item"><span class="label">구간 내 Fund Flow</span><span class="value" id="infoFlow">-</span></div>
+    <div class="info-item"><span class="label">표시 기간</span><span class="value" id="infoRange">-</span></div>
   </div>
 
-  <!-- Divergence Alert -->
-  <div class="divergence-alert" id="divergenceAlert">
-    <span id="divergenceText"></span>
-  </div>
+  <div class="divergence-alert" id="divergenceAlert"><span id="divergenceText"></span></div>
 
-  <!-- Price Chart -->
   <div class="chart-section">
-    <div class="chart-title">
-      <span class="dot cyan"></span>
-      <span id="priceChartTitle">가격</span>
-    </div>
-    <div class="chart-wrapper">
-      <canvas id="priceChart"></canvas>
-    </div>
+    <div class="chart-title"><span class="dot cyan"></span><span id="priceChartTitle">가격</span></div>
+    <div class="chart-wrapper"><canvas id="priceChart"></canvas></div>
   </div>
 
-  <!-- Fund Flow Chart -->
   <div class="chart-section">
-    <div class="chart-title">
-      <span class="dot green"></span>
-      <span id="flowChartTitle">Estimated Fund Flow (Rolling Sum)</span>
-    </div>
-    <div class="chart-wrapper">
-      <canvas id="flowChart"></canvas>
-    </div>
+    <div class="chart-title"><span class="dot green"></span><span id="flowChartTitle">Estimated Fund Flow</span></div>
+    <div class="chart-wrapper"><canvas id="flowChart"></canvas></div>
     <div class="flow-legend">
       <span><span class="box inflow"></span> 순유입 (Inflow)</span>
       <span><span class="box outflow"></span> 순유출 (Outflow)</span>
     </div>
   </div>
 
-  <!-- Share Buttons -->
   <div class="share-group">
     <a class="share-btn twitter" href="#" onclick="doShare('twitter');return false;">
-      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      X
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X
     </a>
     <a class="share-btn kakao" href="#" onclick="doShare('kakao');return false;">
-      <svg viewBox="0 0 24 24"><path d="M12 3c-5.08 0-9.2 3.34-9.2 7.46 0 2.64 1.73 4.96 4.35 6.32l-1.1 4.07c-.1.36.32.65.63.44l4.84-3.18c.16.01.32.02.48.02 5.08 0 9.2-3.34 9.2-7.46S17.08 3 12 3z"/></svg>
-      카카오톡
+      <svg viewBox="0 0 24 24"><path d="M12 3c-5.08 0-9.2 3.34-9.2 7.46 0 2.64 1.73 4.96 4.35 6.32l-1.1 4.07c-.1.36.32.65.63.44l4.84-3.18c.16.01.32.02.48.02 5.08 0 9.2-3.34 9.2-7.46S17.08 3 12 3z"/></svg> 카카오톡
     </a>
     <a class="share-btn telegram" href="#" onclick="doShare('telegram');return false;">
-      <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-      텔레그램
+      <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg> 텔레그램
     </a>
     <a class="share-btn instagram" href="#" onclick="doShare('instagram');return false;">
-      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-      인스타그램
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> 인스타그램
     </a>
     <a class="share-btn copy" href="#" onclick="doShare('copy');return false;">
-      <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-      링크 복사
+      <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> 링크 복사
     </a>
   </div>
 
-  <!-- Data Note -->
   <div class="data-note">
-    <strong>Fund Flow 추정 방식:</strong> Volume × Price Direction의 Rolling Sum으로 자금 흐름을 추정합니다. Shares Outstanding 히스토리가 쌓이면 정확도가 향상됩니다.
+    <strong>Fund Flow 추정 방식:</strong> Volume × Price Direction의 일별 합산으로 자금 흐름을 추정합니다.
   </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    Herdvibe.com · ETF Fund Flow Tracker · Data from Yahoo Finance
-  </div>
+  <div class="footer">Herdvibe.com · ETF Fund Flow Tracker · Data from Yahoo Finance</div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================
-// CONFIG
-// ============================================
 const SHARE_URL = 'https://herdvibe.com/92';
-const SHARE_TITLE = 'ETF 자금 유입 트래커 - Herdvibe';
 
 const ETF_LIST = {
   "미국 대표 지수": { SPY: "S&P 500", QQQ: "나스닥 100", DIA: "다우", IWM: "러셀 2000" },
@@ -503,9 +239,7 @@ const ETF_LIST = {
   "변동성/헷지": { VXX: "VIX", UVXY: "VIX 2배" }
 };
 
-// ============================================
-// WATERMARK PLUGIN
-// ============================================
+// Watermark
 const watermarkPlugin = {
   id: 'watermark',
   afterDraw(chart) {
@@ -515,103 +249,55 @@ const watermarkPlugin = {
     ctx.fillStyle = 'rgba(255,255,255,0.04)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const cx = (chart.chartArea.left + chart.chartArea.right) / 2;
-    const cy = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-    ctx.fillText('Herdvibe.com', cx, cy);
+    ctx.fillText('Herdvibe.com',
+      (chart.chartArea.left + chart.chartArea.right) / 2,
+      (chart.chartArea.top + chart.chartArea.bottom) / 2);
     ctx.restore();
   }
 };
 Chart.register(watermarkPlugin);
 
-// ============================================
-// STATE
-// ============================================
 let currentTicker = 'SPY';
-let currentWindow = 63;
-let priceData = null;
+let currentDays = 63; // 0 = ALL
+let allPriceData = null;
 let priceChart = null;
 let flowChart = null;
 
-// ============================================
-// SHARE (iframe fallback)
-// ============================================
+// ===== SHARE =====
 function openUrl(url) {
   try {
     const a = document.createElement('a');
-    a.href = url;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  } catch(e) {
-    try { window.open(url, '_blank'); } catch(e2) {}
-  }
+    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  } catch(e) { try { window.open(url, '_blank'); } catch(e2) {} }
 }
-
 function doCopy(text) {
+  try { if (window.top?.navigator?.clipboard) { window.top.navigator.clipboard.writeText(text); return; } } catch(e) {}
+  try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text); return; } } catch(e) {}
   try {
-    if (window.top && window.top.navigator && window.top.navigator.clipboard) {
-      window.top.navigator.clipboard.writeText(text); return;
-    }
-  } catch(e) {}
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text); return;
-    }
-  } catch(e) {}
-  try {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
+    const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
     ta.style.cssText = 'position:fixed;left:0;top:0;opacity:0;width:1px;height:1px;';
-    document.body.appendChild(ta);
-    ta.select();
-    ta.setSelectionRange(0, ta.value.length);
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-  } catch(e) {
-    window.prompt('아래 링크를 복사하세요:', text);
-  }
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, ta.value.length);
+    document.execCommand('copy'); document.body.removeChild(ta);
+  } catch(e) { window.prompt('아래 링크를 복사하세요:', text); }
 }
-
 function doShare(platform) {
-  const ticker = currentTicker;
-  const name = findTickerName(ticker);
-  const text = `${ticker} (${name}) ETF 자금 유입 트래커 - Herdvibe`;
-
+  const t = `${currentTicker} (${findTickerName(currentTicker)}) ETF 자금 유입 트래커 - Herdvibe`;
   switch(platform) {
-    case 'twitter':
-      openUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SHARE_URL)}`);
-      break;
-    case 'kakao':
-      openUrl(`https://story.kakao.com/share?url=${encodeURIComponent(SHARE_URL)}`);
-      break;
-    case 'telegram':
-      openUrl(`https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(text)}`);
-      break;
-    case 'instagram':
-      doCopy(SHARE_URL);
-      openUrl('https://www.instagram.com/');
-      showToast('링크가 복사되었습니다 — 인스타그램 스토리에 붙여넣기 하세요');
-      break;
-    case 'copy':
-      doCopy(SHARE_URL);
-      showToast('링크가 복사되었습니다');
-      break;
+    case 'twitter': openUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(SHARE_URL)}`); break;
+    case 'kakao': openUrl(`https://story.kakao.com/share?url=${encodeURIComponent(SHARE_URL)}`); break;
+    case 'telegram': openUrl(`https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(t)}`); break;
+    case 'instagram': doCopy(SHARE_URL); openUrl('https://www.instagram.com/'); showToast('링크가 복사되었습니다 — 인스타그램 스토리에 붙여넣기 하세요'); break;
+    case 'copy': doCopy(SHARE_URL); showToast('링크가 복사되었습니다'); break;
   }
 }
-
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ============================================
-// INIT
-// ============================================
+// ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   initControls();
   loadData(currentTicker);
@@ -623,202 +309,153 @@ function initControls() {
 
   for (const cat of Object.keys(ETF_LIST)) {
     const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
+    opt.value = cat; opt.textContent = cat;
     catSelect.appendChild(opt);
   }
-
-  catSelect.addEventListener('change', () => {
-    populateTickers(catSelect.value);
-    loadData(tickerSelect.value);
-  });
-
-  tickerSelect.addEventListener('change', () => {
-    loadData(tickerSelect.value);
-  });
-
+  catSelect.addEventListener('change', () => { populateTickers(catSelect.value); loadData(tickerSelect.value); });
+  tickerSelect.addEventListener('change', () => loadData(tickerSelect.value));
   populateTickers('all');
 
   document.querySelectorAll('.window-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.window-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      currentWindow = parseInt(btn.dataset.days);
-      if (priceData) renderCharts();
+      currentDays = parseInt(btn.dataset.days);
+      if (allPriceData) renderCharts();
     });
   });
 }
 
 function populateTickers(category) {
-  const tickerSelect = document.getElementById('tickerSelect');
-  tickerSelect.innerHTML = '';
-
+  const sel = document.getElementById('tickerSelect');
+  sel.innerHTML = '';
   if (category === 'all') {
     for (const [cat, tickers] of Object.entries(ETF_LIST)) {
-      const group = document.createElement('optgroup');
-      group.label = cat;
-      for (const [ticker, name] of Object.entries(tickers)) {
-        const opt = document.createElement('option');
-        opt.value = ticker;
-        opt.textContent = `${ticker} — ${name}`;
-        if (ticker === currentTicker) opt.selected = true;
-        group.appendChild(opt);
+      const g = document.createElement('optgroup'); g.label = cat;
+      for (const [t, n] of Object.entries(tickers)) {
+        const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`;
+        if (t === currentTicker) o.selected = true;
+        g.appendChild(o);
       }
-      tickerSelect.appendChild(group);
+      sel.appendChild(g);
     }
   } else {
-    const tickers = ETF_LIST[category] || {};
-    for (const [ticker, name] of Object.entries(tickers)) {
-      const opt = document.createElement('option');
-      opt.value = ticker;
-      opt.textContent = `${ticker} — ${name}`;
-      tickerSelect.appendChild(opt);
+    for (const [t, n] of Object.entries(ETF_LIST[category] || {})) {
+      const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`;
+      sel.appendChild(o);
     }
   }
 }
 
-// ============================================
-// DATA LOADING
-// ============================================
+// ===== DATA =====
 async function loadData(ticker) {
   currentTicker = ticker;
-
   try {
-    const priceUrl = `data/prices/${ticker}.csv`;
-    const priceResp = await fetch(priceUrl);
-
-    if (!priceResp.ok) {
-      console.error(`${ticker}.csv not found`);
-      return;
+    const resp = await fetch(`data/prices/${ticker}.csv`);
+    if (!resp.ok) { console.error(`${ticker}.csv not found`); return; }
+    const text = await resp.text();
+    const parsed = Papa.parse(text, { header: true, dynamicTyping: true, skipEmptyLines: true });
+    allPriceData = parsed.data.filter(d => d.Date && d.Close);
+    if (allPriceData.length > 0) {
+      document.getElementById('lastUpdated').textContent = `Last updated: ${allPriceData[allPriceData.length - 1].Date}`;
     }
-
-    const priceText = await priceResp.text();
-    const parsed = Papa.parse(priceText, { header: true, dynamicTyping: true, skipEmptyLines: true });
-    priceData = parsed.data.filter(d => d.Date && d.Close);
-
-    if (priceData.length > 0) {
-      document.getElementById('lastUpdated').textContent = `Last updated: ${priceData[priceData.length - 1].Date}`;
-    }
-
     renderCharts();
-  } catch (err) {
-    console.error('Load failed:', err.message);
-  }
+  } catch (err) { console.error('Load failed:', err); }
 }
 
-// ============================================
-// FUND FLOW
-// ============================================
-function calculateFundFlow(data, windowSize) {
-  const dailyFlow = [];
+// ===== FUND FLOW =====
+function calculateDailyFlow(data) {
+  const result = [];
   for (let i = 1; i < data.length; i++) {
-    const prev = data[i - 1];
-    const curr = data[i];
+    const prev = data[i - 1], curr = data[i];
     const dir = curr.Close > prev.Close ? 1 : curr.Close < prev.Close ? -1 : 0;
-    dailyFlow.push({
+    result.push({
       date: curr.Date,
       close: curr.Close,
-      volume: curr.Volume,
       dailyFlow: (curr.Volume * curr.Close * dir) / 1e6
     });
-  }
-
-  const result = [];
-  for (let i = 0; i < dailyFlow.length; i++) {
-    let sum = 0;
-    const start = Math.max(0, i - windowSize + 1);
-    for (let j = start; j <= i; j++) sum += dailyFlow[j].dailyFlow;
-    result.push({ ...dailyFlow[i], rollingFlow: i >= windowSize - 1 ? sum : null });
   }
   return result;
 }
 
-// ============================================
-// DIVERGENCE
-// ============================================
-function detectDivergence(flowData, lookback = 20) {
-  if (flowData.length < lookback * 2) return null;
-  const recent = flowData.slice(-lookback).filter(d => d.rollingFlow !== null);
-  if (recent.length < 5) return null;
+function cumulativeFlow(dailyFlows) {
+  let sum = 0;
+  return dailyFlows.map(d => {
+    sum += d.dailyFlow;
+    return { ...d, cumFlow: sum };
+  });
+}
 
-  const pDir = (recent[recent.length-1].close - recent[0].close) / recent[0].close;
-  const fDir = recent[recent.length-1].rollingFlow - recent[0].rollingFlow;
+// ===== DIVERGENCE =====
+function detectDivergence(data) {
+  if (data.length < 10) return null;
+  const half = Math.floor(data.length / 2);
+  const first = data.slice(0, half);
+  const second = data.slice(half);
+
+  const pFirst = first[first.length - 1].close, pSecond = second[second.length - 1].close;
+  const fFirst = first[first.length - 1].cumFlow, fSecond = second[second.length - 1].cumFlow;
+  const pDir = (pSecond - pFirst) / pFirst;
+  const fDir = fSecond - fFirst;
+
   if (Math.abs(pDir) < 0.02) return null;
-
   if (pDir > 0.02 && fDir < 0) return { type: 'bearish', message: `Bearish Divergence: 가격 +${(pDir*100).toFixed(1)}% 상승 중이나 fund flow 감소 — 스마트머니 이탈 가능성` };
   if (pDir < -0.02 && fDir > 0) return { type: 'bullish', message: `Bullish Divergence: 가격 ${(pDir*100).toFixed(1)}% 하락 중이나 fund flow 증가 — 저가 매수 유입 가능성` };
   return null;
 }
 
-// ============================================
-// RENDER
-// ============================================
+// ===== RENDER =====
 function renderCharts() {
-  if (!priceData || !priceData.length) return;
+  if (!allPriceData || !allPriceData.length) return;
 
-  const flowData = calculateFundFlow(priceData, currentWindow);
-  const validData = flowData.filter(d => d.rollingFlow !== null);
-  if (!validData.length) return;
+  // 기간에 따라 데이터 슬라이스
+  let slicedPrice;
+  if (currentDays === 0) {
+    slicedPrice = allPriceData; // ALL
+  } else {
+    slicedPrice = allPriceData.slice(-currentDays - 1); // +1 for prev day calc
+  }
 
-  updateInfoBar(validData);
-  updateDivergence(validData);
+  // 일별 flow 계산
+  const dailyFlows = calculateDailyFlow(slicedPrice);
+  if (!dailyFlows.length) return;
+
+  // 누적 flow
+  const cumData = cumulativeFlow(dailyFlows);
+
+  updateInfoBar(cumData);
+  updateDivergence(cumData);
 
   const windowLabel = document.querySelector('.window-btn.active')?.textContent || '';
-  const labels = validData.map(d => d.date);
-  const prices = validData.map(d => d.close);
-  const flows = validData.map(d => d.rollingFlow);
+  const labels = cumData.map(d => d.date);
+  const prices = cumData.map(d => d.close);
+  const flows = cumData.map(d => d.dailyFlow);
 
-  const step = Math.max(1, Math.floor(labels.length / 40));
+  // 날짜 라벨 간격
+  const maxLabels = 40;
+  const step = Math.max(1, Math.floor(labels.length / maxLabels));
   const displayLabels = labels.map((l, i) => i % step === 0 ? l : '');
 
   const tickerName = findTickerName(currentTicker);
 
-  // Price Chart
+  // ---- Price Chart ----
   document.getElementById('priceChartTitle').textContent = `${currentTicker} (${tickerName}) — 가격`;
   if (priceChart) priceChart.destroy();
-
   priceChart = new Chart(document.getElementById('priceChart').getContext('2d'), {
     type: 'line',
     data: {
       labels: displayLabels,
       datasets: [{
-        data: prices,
-        borderColor: '#22d3ee',
-        borderWidth: 1.5,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        tension: 0,
-        fill: false
+        data: prices, borderColor: '#22d3ee', borderWidth: 1.5,
+        pointRadius: 0, pointHoverRadius: 3, tension: 0, fill: false
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          mode: 'index', intersect: false,
-          backgroundColor: '#18181b', titleColor: '#888', bodyColor: '#e8e8f0',
-          borderColor: '#333', borderWidth: 1,
-          titleFont: { family: "'JetBrains Mono'" }, bodyFont: { family: "'JetBrains Mono'" },
-          callbacks: {
-            title: (items) => labels[items[0].dataIndex],
-            label: (item) => `$${item.raw.toFixed(2)}`
-          }
-        }
-      },
-      scales: {
-        x: { grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, maxRotation: 0 } },
-        y: { position: 'right', grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, callback: v => '$' + v.toFixed(0) } }
-      },
-      interaction: { mode: 'index', intersect: false }
-    }
+    options: chartOptions(labels, v => '$' + v.toFixed(v >= 100 ? 0 : 2))
   });
 
-  // Flow Chart
-  document.getElementById('flowChartTitle').textContent = `Estimated Fund Flow — Rolling ${windowLabel} Sum (백만$)`;
+  // ---- Flow Chart (bar) ----
+  document.getElementById('flowChartTitle').textContent = `일별 Fund Flow — ${windowLabel} (백만$)`;
   if (flowChart) flowChart.destroy();
-
   flowChart = new Chart(document.getElementById('flowChart').getContext('2d'), {
     type: 'bar',
     data: {
@@ -827,56 +464,59 @@ function renderCharts() {
         data: flows,
         backgroundColor: flows.map(f => f >= 0 ? 'rgba(34,197,94,0.4)' : 'rgba(239,68,68,0.4)'),
         borderColor: flows.map(f => f >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)'),
-        borderWidth: 1,
-        barPercentage: 1.0,
-        categoryPercentage: 1.0
+        borderWidth: 1, barPercentage: 1.0, categoryPercentage: 1.0
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          mode: 'index', intersect: false,
-          backgroundColor: '#18181b', titleColor: '#888', bodyColor: '#e8e8f0',
-          borderColor: '#333', borderWidth: 1,
-          titleFont: { family: "'JetBrains Mono'" }, bodyFont: { family: "'JetBrains Mono'" },
-          callbacks: {
-            title: (items) => labels[items[0].dataIndex],
-            label: (item) => `${item.raw >= 0 ? '+' : ''}${item.raw.toFixed(1)}M`
-          }
-        }
-      },
-      scales: {
-        x: { grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, maxRotation: 0 } },
-        y: { position: 'right', grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, callback: v => v.toFixed(0) + 'M' } }
-      },
-      interaction: { mode: 'index', intersect: false }
-    }
+    options: chartOptions(labels, v => (v >= 0 ? '+' : '') + v.toFixed(0) + 'M', true)
   });
 }
 
-// ============================================
-// HELPERS
-// ============================================
+function chartOptions(fullLabels, yCallback, isBar) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        backgroundColor: '#18181b', titleColor: '#888', bodyColor: '#e8e8f0',
+        borderColor: '#333', borderWidth: 1,
+        titleFont: { family: "'JetBrains Mono'" }, bodyFont: { family: "'JetBrains Mono'" },
+        callbacks: {
+          title: (items) => fullLabels[items[0].dataIndex],
+          label: (item) => {
+            if (isBar) return `${item.raw >= 0 ? '+' : ''}${item.raw.toFixed(1)}M`;
+            return `$${item.raw.toFixed(2)}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, maxRotation: 0 } },
+      y: { position: 'right', grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, callback: yCallback } }
+    },
+    interaction: { mode: 'index', intersect: false }
+  };
+}
+
+// ===== HELPERS =====
 function updateInfoBar(data) {
   if (!data || data.length < 2) return;
-  const last = data[data.length - 1], prev = data[data.length - 2];
-  const dc = last.close - prev.close, dcp = (dc / prev.close) * 100;
-  const s = dc >= 0 ? '+' : '';
+  const last = data[data.length - 1], prev = data[data.length - 2], first = data[0];
+  const dc = last.close - prev.close, dcp = (dc / prev.close) * 100, s = dc >= 0 ? '+' : '';
 
   document.getElementById('infoPrice').textContent = `$${last.close.toFixed(2)}`;
   const dayEl = document.getElementById('infoDayChange');
   dayEl.textContent = `${s}${dc.toFixed(2)} (${s}${dcp.toFixed(2)}%)`;
   dayEl.className = `value ${dc >= 0 ? 'positive' : 'negative'}`;
 
+  // 구간 내 누적 flow
+  const totalFlow = last.cumFlow;
+  const fs = totalFlow >= 0 ? '+' : '';
   const flowEl = document.getElementById('infoFlow');
-  const fs = last.rollingFlow >= 0 ? '+' : '';
-  flowEl.textContent = `${fs}${last.rollingFlow.toFixed(1)}M`;
-  flowEl.className = `value ${last.rollingFlow >= 0 ? 'positive' : 'negative'}`;
+  flowEl.textContent = `${fs}${totalFlow.toFixed(1)}M`;
+  flowEl.className = `value ${totalFlow >= 0 ? 'positive' : 'negative'}`;
 
-  document.getElementById('infoRange').textContent = `${data[0].date} ~ ${last.date}`;
+  document.getElementById('infoRange').textContent = `${first.date} ~ ${last.date}`;
 }
 
 function updateDivergence(data) {
@@ -891,9 +531,7 @@ function updateDivergence(data) {
 }
 
 function findTickerName(ticker) {
-  for (const tickers of Object.values(ETF_LIST)) {
-    if (tickers[ticker]) return tickers[ticker];
-  }
+  for (const tickers of Object.values(ETF_LIST)) { if (tickers[ticker]) return tickers[ticker]; }
   return ticker;
 }
 </script>
