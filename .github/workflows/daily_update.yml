@@ -3,9 +3,8 @@ name: ETF Fund Flow Daily Update
 on:
   schedule:
     # 미장 마감 후 실행 (UTC 22:00 = KST 07:00)
-    # 월~금만 의미있지만, 주말에 실행돼도 새 데이터가 없으면 스킵됨
     - cron: '0 22 * * 1-5'
-  workflow_dispatch:  # 수동 실행 가능
+  workflow_dispatch:
 
 jobs:
   update:
@@ -23,13 +22,10 @@ jobs:
           python-version: '3.11'
       
       - name: Install dependencies
-        run: |
-          pip install yfinance pandas
+        run: pip install yfinance pandas
       
       - name: Run daily update
-        run: |
-          cd etf_fund_flow
-          python daily_update.py
+        run: python daily_update.py
       
       - name: Commit and push
         run: |
