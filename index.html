@@ -300,7 +300,7 @@ function toggleAccordion(header) {
 
 // Share
 function openUrl(url) {
-  try { const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; document.body.appendChild(a); a.click(); document.body.removeChild(a); } catch(e) { try { window.open(url, '_blank'); } catch(e2) {} }
+  try { const a = document.createElement('a'); a.href = url; a.target = '_top'; a.rel = 'noopener noreferrer'; document.body.appendChild(a); a.click(); document.body.removeChild(a); } catch(e) { try { window.top.location.href = url; } catch(e2) {} }
 }
 function doCopy(text) {
   try { if (window.top?.navigator?.clipboard) { window.top.navigator.clipboard.writeText(text); return; } } catch(e) {}
