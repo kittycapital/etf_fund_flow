@@ -303,7 +303,7 @@ function openUrl(url) {
   try { const a = document.createElement('a'); a.href = url; a.target = '_top'; a.rel = 'noopener noreferrer'; document.body.appendChild(a); a.click(); document.body.removeChild(a); } catch(e) { try { window.top.location.href = url; } catch(e2) {} }
 }
 function doCopy(text) {
-  try { if (window.top?.navigator?.clipboard) { window.top.navigator.clipboard.writeText(text); return; } } catch(e) {}
+  try { window.parent.postMessage({type:'clipboard',text:text},'*'); } catch(e) {}
   try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text); return; } } catch(e) {}
   try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:0;top:0;opacity:0;width:1px;height:1px;'; document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, ta.value.length); document.execCommand('copy'); document.body.removeChild(ta); } catch(e) { window.prompt('아래 링크를 복사하세요:', text); }
 }
@@ -313,7 +313,7 @@ function doShare(platform) {
     case 'twitter': openUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(SHARE_URL)}`); break;
     case 'kakao': openUrl(`https://story.kakao.com/share?url=${encodeURIComponent(SHARE_URL)}`); break;
     case 'telegram': openUrl(`https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(t)}`); break;
-    case 'instagram': doCopy(SHARE_URL); openUrl('https://www.instagram.com/'); showToast('링크가 복사되었습니다 — 인스타그램 스토리에 붙여넣기 하세요'); break;
+    case 'instagram': doCopy(SHARE_URL); showToast('링크가 복사되었습니다 — 인스타그램에 붙여넣기 하세요'); break;
     case 'copy': doCopy(SHARE_URL); showToast('링크가 복사되었습니다'); break;
   }
 }
