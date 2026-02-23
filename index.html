@@ -24,70 +24,36 @@
   --accent-green: #22c55e;
   --accent-red: #ef4444;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 ::-webkit-scrollbar { display: none; }
 * { -ms-overflow-style: none; scrollbar-width: none; }
 html, body { overflow-x: hidden; }
-
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
-}
-
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
 .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
 
-.header {
-  text-align: center;
-  padding: 30px 0 20px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 24px;
-}
+.header { text-align: center; padding: 30px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
 .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
 .header .subtitle { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 6px; }
 
-.controls {
-  display: flex; gap: 16px; margin-bottom: 24px;
-  flex-wrap: wrap; align-items: flex-end; justify-content: center;
-}
+.controls { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; align-items: flex-end; justify-content: center; }
 .control-group { display: flex; flex-direction: column; gap: 6px; }
-.control-group label {
-  font-size: 11px; font-weight: 500; color: var(--text-secondary);
-  text-transform: uppercase; letter-spacing: 0.5px; text-align: center;
-}
-.control-group select {
-  font-family: 'JetBrains Mono', monospace; font-size: 13px;
-  padding: 8px 12px; background: var(--bg-card); color: var(--text-primary);
-  border: 1px solid var(--border); border-radius: 6px; cursor: pointer; min-width: 180px;
-}
+.control-group label { font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
+.control-group select { font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 8px 12px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; min-width: 180px; }
 .control-group select:focus { outline: none; border-color: var(--accent-cyan); }
 
 .window-buttons { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
-.window-btn {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  padding: 8px 14px; background: var(--bg-card); color: var(--text-secondary);
-  border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.15s;
-}
+.window-btn { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 8px 14px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.15s; }
 .window-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
 .window-btn.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); font-weight: 600; }
 
-.info-bar {
-  display: flex; gap: 24px; margin-bottom: 20px; padding: 12px 16px;
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
-  flex-wrap: wrap; justify-content: center;
-}
+.info-bar { display: flex; gap: 24px; margin-bottom: 20px; padding: 12px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; flex-wrap: wrap; justify-content: center; }
 .info-item { display: flex; flex-direction: column; gap: 2px; align-items: center; }
 .info-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .info-item .value { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; }
 .info-item .value.positive { color: var(--accent-green); }
 .info-item .value.negative { color: var(--accent-red); }
 
-.divergence-alert {
-  display: none; margin-bottom: 16px; padding: 10px 16px; border-radius: 8px;
-  font-size: 13px; font-weight: 500; align-items: center; gap: 8px; justify-content: center;
-}
+.divergence-alert { display: none; margin-bottom: 16px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; align-items: center; gap: 8px; justify-content: center; }
 .divergence-alert.bullish { display: flex; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); color: var(--accent-green); }
 .divergence-alert.bearish { display: flex; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: var(--accent-red); }
 
@@ -105,12 +71,7 @@ body {
 .flow-legend .box.outflow { background: rgba(239,68,68,0.4); border: 1px solid var(--accent-red); }
 
 .share-group { display: flex; justify-content: center; gap: 8px; margin: 20px 0; }
-.share-btn {
-  display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px;
-  border: 1px solid var(--border); border-radius: 20px; background: var(--bg-card);
-  color: var(--text-secondary); font-family: 'Noto Sans KR', sans-serif; font-size: 12px;
-  cursor: pointer; transition: all 0.15s; text-decoration: none;
-}
+.share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg-card); color: var(--text-secondary); font-family: 'Noto Sans KR', sans-serif; font-size: 12px; cursor: pointer; transition: all 0.15s; text-decoration: none; }
 .share-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
 .share-btn svg { width: 14px; height: 14px; fill: currentColor; }
 .share-btn.twitter:hover { color: #1da1f2; border-color: #1da1f2; }
@@ -119,19 +80,27 @@ body {
 .share-btn.instagram:hover { color: #e4405f; border-color: #e4405f; }
 .share-btn.copy:hover { color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-.toast {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
-  background: #222; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px;
-  z-index: 9999; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap;
-}
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+/* Accordion */
+.accordion { margin-top: 24px; }
+.accordion-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+.accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; transition: background 0.15s; user-select: none; }
+.accordion-header:hover { background: var(--bg-hover); }
+.accordion-header h3 { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.accordion-arrow { font-size: 12px; color: var(--text-muted); transition: transform 0.25s; }
+.accordion-item.open .accordion-arrow { transform: rotate(180deg); }
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.accordion-item.open .accordion-body { max-height: 2000px; }
+.accordion-content { padding: 0 16px 16px; font-size: 13px; line-height: 1.8; color: var(--text-secondary); }
+.accordion-content strong { color: var(--text-primary); }
+.signal-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.signal-table th, .signal-table td { padding: 8px 12px; border: 1px solid var(--border); text-align: center; }
+.signal-table th { background: var(--bg-hover); color: var(--text-primary); font-weight: 600; }
+.signal-table .green { color: var(--accent-green); }
+.signal-table .red { color: var(--accent-red); }
+.signal-table .yellow { color: #fbbf24; }
 
-.data-note {
-  margin-top: 20px; padding: 12px 16px; background: var(--bg-card);
-  border: 1px solid var(--border); border-radius: 8px; font-size: 11px;
-  color: var(--text-muted); line-height: 1.6; text-align: center;
-}
-.data-note strong { color: var(--text-secondary); }
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px; z-index: 9999; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
 .footer { margin-top: 32px; padding: 16px 0; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--text-muted); }
 
@@ -143,6 +112,8 @@ body {
   .chart-wrapper { height: 220px; }
   .share-group { flex-wrap: wrap; }
   .share-btn { font-size: 11px; padding: 6px 10px; }
+  .signal-table { font-size: 10px; }
+  .signal-table th, .signal-table td { padding: 6px 4px; }
 }
 </style>
 </head>
@@ -201,26 +172,92 @@ body {
   </div>
 
   <div class="share-group">
-    <a class="share-btn twitter" href="#" onclick="doShare('twitter');return false;">
-      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X
-    </a>
-    <a class="share-btn kakao" href="#" onclick="doShare('kakao');return false;">
-      <svg viewBox="0 0 24 24"><path d="M12 3c-5.08 0-9.2 3.34-9.2 7.46 0 2.64 1.73 4.96 4.35 6.32l-1.1 4.07c-.1.36.32.65.63.44l4.84-3.18c.16.01.32.02.48.02 5.08 0 9.2-3.34 9.2-7.46S17.08 3 12 3z"/></svg> 카카오톡
-    </a>
-    <a class="share-btn telegram" href="#" onclick="doShare('telegram');return false;">
-      <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg> 텔레그램
-    </a>
-    <a class="share-btn instagram" href="#" onclick="doShare('instagram');return false;">
-      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> 인스타그램
-    </a>
-    <a class="share-btn copy" href="#" onclick="doShare('copy');return false;">
-      <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> 링크 복사
-    </a>
+    <a class="share-btn twitter" href="#" onclick="doShare('twitter');return false;"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X</a>
+    <a class="share-btn kakao" href="#" onclick="doShare('kakao');return false;"><svg viewBox="0 0 24 24"><path d="M12 3c-5.08 0-9.2 3.34-9.2 7.46 0 2.64 1.73 4.96 4.35 6.32l-1.1 4.07c-.1.36.32.65.63.44l4.84-3.18c.16.01.32.02.48.02 5.08 0 9.2-3.34 9.2-7.46S17.08 3 12 3z"/></svg> 카카오톡</a>
+    <a class="share-btn telegram" href="#" onclick="doShare('telegram');return false;"><svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg> 텔레그램</a>
+    <a class="share-btn instagram" href="#" onclick="doShare('instagram');return false;"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> 인스타그램</a>
+    <a class="share-btn copy" href="#" onclick="doShare('copy');return false;"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> 링크 복사</a>
   </div>
 
-  <div class="data-note">
-    <strong>Fund Flow 추정 방식:</strong> Volume × Price Direction의 일별 합산으로 자금 흐름을 추정합니다.
+  <!-- Accordion Guide -->
+  <div class="accordion">
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>Fund Flow란?</h3>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-content">
+        Fund Flow는 ETF로 유입되거나 유출되는 자금의 흐름을 나타냅니다. ETF는 주식과 달리 Authorized Participant(AP)가 creation(생성)과 redemption(환매)을 통해 주식 수를 늘리거나 줄일 수 있어, 자금 흐름을 추적할 수 있습니다.<br><br>
+        <strong>유입(Inflow):</strong> 투자자들이 해당 ETF에 돈을 넣고 있다는 뜻입니다. AP가 기초자산을 사서 ETF 주식을 새로 만듭니다.<br>
+        <strong>유출(Outflow):</strong> 투자자들이 돈을 빼고 있다는 뜻입니다. AP가 ETF 주식을 해체해서 기초자산을 매도합니다.<br><br>
+        이 대시보드는 <strong>Volume × Price Direction</strong>으로 일별 자금 흐름을 추정합니다. 가격이 오른 날의 거래대금은 유입, 내린 날의 거래대금은 유출로 계산합니다.
+      </div></div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>차트 패턴 해석법</h3>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-content">
+        가격과 fund flow의 방향 조합에 따라 시장 상황을 해석할 수 있습니다.
+        <table class="signal-table">
+          <tr><th>가격</th><th>Fund Flow</th><th>해석</th><th>시그널</th></tr>
+          <tr><td class="green">↑ 상승</td><td class="green">↑ 유입</td><td>자금이 들어오며 가격도 상승</td><td class="green">건강한 상승</td></tr>
+          <tr><td class="green">↑ 상승</td><td class="red">↓ 유출</td><td>가격은 오르나 스마트머니 이탈</td><td class="red">위험 경고</td></tr>
+          <tr><td class="red">↓ 하락</td><td class="green">↑ 유입</td><td>하락 중 저가 매수 자금 유입</td><td class="yellow">바닥 탐색</td></tr>
+          <tr><td class="red">↓ 하락</td><td class="red">↓ 유출</td><td>투매 + 자금 이탈 동시 발생</td><td class="red">항복 매도</td></tr>
+        </table>
+        <strong>Divergence(괴리)</strong>가 가장 중요한 시그널입니다. 가격과 fund flow 방향이 반대일 때 대시보드 상단에 자동으로 알림이 표시됩니다.
+      </div></div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>유입/유출이 동시에 클 때</h3>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-content">
+        하락 구간에서 초록 막대(유입)와 빨간 막대(유출)가 모두 크게 나타나는 경우가 있습니다. 이는 <strong>시장 참여자 간 의견이 극단적으로 갈리는 "양극화" 구간</strong>입니다.<br><br>
+        <strong>매도 세력:</strong> 기존 보유자의 손절, 기관의 포지션 정리<br>
+        <strong>매수 세력:</strong> 저가 매수를 노리는 신규 자금 유입<br><br>
+        이때 핵심은 <strong>"누가 이기고 있는가"</strong>입니다. Info bar의 "구간 내 Fund Flow" 값이 음수라면 유출이 우세, 양수라면 유입이 우세합니다.<br><br>
+        <strong>바닥 신호:</strong> 빨간 막대가 점점 작아지면서 초록 막대가 유지되면 매도 압력이 소진되고 있다는 뜻으로, 바닥 근처일 가능성이 있습니다.<br>
+        <strong>추가 하락 경고:</strong> 초록 막대 후 더 큰 빨간 막대가 반복되면, 저가 매수자들도 손절하는 단계로 아직 항복(capitulation)이 끝나지 않았음을 시사합니다.
+      </div></div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>기간 탭 활용법</h3>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-content">
+        기간 탭은 차트에 표시되는 데이터 범위를 조절합니다.<br><br>
+        <strong>2주 / 1개월:</strong> 단기 트레이딩 관점. 최근 며칠간의 급격한 유입/유출 변화를 포착합니다. 이벤트(실적 발표, FOMC 등) 전후 자금 흐름 확인에 유용합니다.<br>
+        <strong>3개월 / 6개월:</strong> 스윙 트레이딩 및 중기 추세 분석. 섹터 로테이션이나 테마 전환의 초기 징후를 발견할 수 있습니다.<br>
+        <strong>1년 / 3년:</strong> 장기 투자 관점. 대형 사이클의 자금 흐름 패턴을 파악하고, 현재 위치가 사이클 어디쯤인지 가늠할 수 있습니다.<br>
+        <strong>5년 / ALL:</strong> 거시적 관점. 코로나 폭락(2020), 금리 인상기(2022) 등 역사적 이벤트와 현재 상황을 비교하는 데 활용합니다.<br><br>
+        <strong>팁:</strong> 같은 ETF를 단기(2주)와 장기(1년)로 번갈아 보면, 단기 노이즈와 장기 추세를 분리해서 판단할 수 있습니다.
+      </div></div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>ETF 유형별 해석 차이</h3>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-content">
+        <strong>대형 인덱스 ETF (SPY, QQQ, DIA):</strong> 거래량이 많아 fund flow 추정의 신뢰도가 높습니다. 시장 전체 센티먼트를 대표하며, 기관 자금 흐름이 잘 반영됩니다.<br><br>
+        <strong>섹터 ETF (XLF, XLE, SMH 등):</strong> 섹터 로테이션을 포착하는 데 유용합니다. 특정 섹터에만 자금이 몰리거나 빠지면 시장 테마 전환의 신호일 수 있습니다.<br><br>
+        <strong>커머디티 ETF (GLD, SLV, USO):</strong> 실물 자산 연동 ETF는 creation/redemption이 직접적으로 기초자산 매매와 연결되어 fund flow의 의미가 가장 직관적입니다. GLD 유입 = 실제 금 매수.<br><br>
+        <strong>채권 ETF (TLT, HYG):</strong> 금리 전환기에 특히 중요합니다. TLT 유입 증가는 시장이 금리 하락(안전자산 선호)을 예상하고 있다는 뜻일 수 있습니다.<br><br>
+        <strong>변동성 ETF (VXX, UVXY):</strong> 레버리지 특성상 거래량 변동이 크고 노이즈가 많습니다. 방향성보다는 극단적 스파이크에 주목하세요.<br><br>
+        <strong>유의사항:</strong> 이 대시보드의 fund flow는 거래량 기반 추정치이며, 실제 creation/redemption 데이터와 다를 수 있습니다. 투자 판단의 보조 도구로 활용하시고, 단독 매매 신호로 사용하지 마세요.
+      </div></div>
+    </div>
   </div>
+
   <div class="footer">Herdvibe.com · ETF Fund Flow Tracker · Data from Yahoo Finance</div>
 </div>
 
@@ -228,7 +265,6 @@ body {
 
 <script>
 const SHARE_URL = 'https://herdvibe.com/92';
-
 const ETF_LIST = {
   "미국 대표 지수": { SPY: "S&P 500", QQQ: "나스닥 100", DIA: "다우", IWM: "러셀 2000" },
   "섹터": { XLF: "금융", XLE: "에너지", XLK: "기술", XLV: "헬스케어", IGV: "소프트웨어", SMH: "반도체", SOXX: "반도체", XBI: "바이오", ITB: "주택건설" },
@@ -239,47 +275,37 @@ const ETF_LIST = {
   "변동성/헷지": { VXX: "VIX", UVXY: "VIX 2배" }
 };
 
-// Watermark
 const watermarkPlugin = {
   id: 'watermark',
   afterDraw(chart) {
     const ctx = chart.ctx;
     ctx.save();
-    ctx.font = '40px JetBrains Mono';
+    ctx.font = '28px JetBrains Mono';
     ctx.fillStyle = 'rgba(255,255,255,0.04)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('Herdvibe.com',
-      (chart.chartArea.left + chart.chartArea.right) / 2,
-      (chart.chartArea.top + chart.chartArea.bottom) / 2);
+    ctx.fillText('Herdvibe.com', (chart.chartArea.left + chart.chartArea.right) / 2, (chart.chartArea.top + chart.chartArea.bottom) / 2);
     ctx.restore();
   }
 };
 Chart.register(watermarkPlugin);
 
-let currentTicker = 'SPY';
-let currentDays = 63; // 0 = ALL
-let allPriceData = null;
-let priceChart = null;
-let flowChart = null;
+let currentTicker = 'SPY', currentDays = 63, allPriceData = null, priceChart = null, flowChart = null;
 
-// ===== SHARE =====
+// Accordion
+function toggleAccordion(header) {
+  const item = header.parentElement;
+  item.classList.toggle('open');
+}
+
+// Share
 function openUrl(url) {
-  try {
-    const a = document.createElement('a');
-    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  } catch(e) { try { window.open(url, '_blank'); } catch(e2) {} }
+  try { const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; document.body.appendChild(a); a.click(); document.body.removeChild(a); } catch(e) { try { window.open(url, '_blank'); } catch(e2) {} }
 }
 function doCopy(text) {
   try { if (window.top?.navigator?.clipboard) { window.top.navigator.clipboard.writeText(text); return; } } catch(e) {}
   try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text); return; } } catch(e) {}
-  try {
-    const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
-    ta.style.cssText = 'position:fixed;left:0;top:0;opacity:0;width:1px;height:1px;';
-    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, ta.value.length);
-    document.execCommand('copy'); document.body.removeChild(ta);
-  } catch(e) { window.prompt('아래 링크를 복사하세요:', text); }
+  try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:0;top:0;opacity:0;width:1px;height:1px;'; document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, ta.value.length); document.execCommand('copy'); document.body.removeChild(ta); } catch(e) { window.prompt('아래 링크를 복사하세요:', text); }
 }
 function doShare(platform) {
   const t = `${currentTicker} (${findTickerName(currentTicker)}) ETF 자금 유입 트래커 - Herdvibe`;
@@ -291,249 +317,130 @@ function doShare(platform) {
     case 'copy': doCopy(SHARE_URL); showToast('링크가 복사되었습니다'); break;
   }
 }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
-  initControls();
-  loadData(currentTicker);
-});
+// Init
+document.addEventListener('DOMContentLoaded', () => { initControls(); loadData(currentTicker); });
 
 function initControls() {
-  const catSelect = document.getElementById('categorySelect');
-  const tickerSelect = document.getElementById('tickerSelect');
-
-  for (const cat of Object.keys(ETF_LIST)) {
-    const opt = document.createElement('option');
-    opt.value = cat; opt.textContent = cat;
-    catSelect.appendChild(opt);
-  }
+  const catSelect = document.getElementById('categorySelect'), tickerSelect = document.getElementById('tickerSelect');
+  for (const cat of Object.keys(ETF_LIST)) { const o = document.createElement('option'); o.value = cat; o.textContent = cat; catSelect.appendChild(o); }
   catSelect.addEventListener('change', () => { populateTickers(catSelect.value); loadData(tickerSelect.value); });
   tickerSelect.addEventListener('change', () => loadData(tickerSelect.value));
   populateTickers('all');
-
   document.querySelectorAll('.window-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.window-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentDays = parseInt(btn.dataset.days);
+      btn.classList.add('active'); currentDays = parseInt(btn.dataset.days);
       if (allPriceData) renderCharts();
     });
   });
 }
 
 function populateTickers(category) {
-  const sel = document.getElementById('tickerSelect');
-  sel.innerHTML = '';
+  const sel = document.getElementById('tickerSelect'); sel.innerHTML = '';
   if (category === 'all') {
     for (const [cat, tickers] of Object.entries(ETF_LIST)) {
       const g = document.createElement('optgroup'); g.label = cat;
-      for (const [t, n] of Object.entries(tickers)) {
-        const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`;
-        if (t === currentTicker) o.selected = true;
-        g.appendChild(o);
-      }
+      for (const [t, n] of Object.entries(tickers)) { const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`; if (t === currentTicker) o.selected = true; g.appendChild(o); }
       sel.appendChild(g);
     }
-  } else {
-    for (const [t, n] of Object.entries(ETF_LIST[category] || {})) {
-      const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`;
-      sel.appendChild(o);
-    }
-  }
+  } else { for (const [t, n] of Object.entries(ETF_LIST[category] || {})) { const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`; sel.appendChild(o); } }
 }
 
-// ===== DATA =====
+// Data
 async function loadData(ticker) {
   currentTicker = ticker;
   try {
     const resp = await fetch(`data/prices/${ticker}.csv`);
-    if (!resp.ok) { console.error(`${ticker}.csv not found`); return; }
+    if (!resp.ok) return;
     const text = await resp.text();
-    const parsed = Papa.parse(text, { header: true, dynamicTyping: true, skipEmptyLines: true });
-    allPriceData = parsed.data.filter(d => d.Date && d.Close);
-    if (allPriceData.length > 0) {
-      document.getElementById('lastUpdated').textContent = `Last updated: ${allPriceData[allPriceData.length - 1].Date}`;
-    }
+    allPriceData = Papa.parse(text, { header: true, dynamicTyping: true, skipEmptyLines: true }).data.filter(d => d.Date && d.Close);
+    if (allPriceData.length) document.getElementById('lastUpdated').textContent = `Last updated: ${allPriceData[allPriceData.length - 1].Date}`;
     renderCharts();
-  } catch (err) { console.error('Load failed:', err); }
+  } catch (err) { console.error(err); }
 }
 
-// ===== FUND FLOW =====
 function calculateDailyFlow(data) {
-  const result = [];
+  const r = [];
   for (let i = 1; i < data.length; i++) {
-    const prev = data[i - 1], curr = data[i];
-    const dir = curr.Close > prev.Close ? 1 : curr.Close < prev.Close ? -1 : 0;
-    result.push({
-      date: curr.Date,
-      close: curr.Close,
-      dailyFlow: (curr.Volume * curr.Close * dir) / 1e6
-    });
+    const p = data[i-1], c = data[i], dir = c.Close > p.Close ? 1 : c.Close < p.Close ? -1 : 0;
+    r.push({ date: c.Date, close: c.Close, dailyFlow: (c.Volume * c.Close * dir) / 1e6 });
   }
-  return result;
+  return r;
 }
 
-function cumulativeFlow(dailyFlows) {
-  let sum = 0;
-  return dailyFlows.map(d => {
-    sum += d.dailyFlow;
-    return { ...d, cumFlow: sum };
-  });
-}
+function cumulativeFlow(df) { let s = 0; return df.map(d => { s += d.dailyFlow; return { ...d, cumFlow: s }; }); }
 
-// ===== DIVERGENCE =====
 function detectDivergence(data) {
   if (data.length < 10) return null;
-  const half = Math.floor(data.length / 2);
-  const first = data.slice(0, half);
-  const second = data.slice(half);
-
-  const pFirst = first[first.length - 1].close, pSecond = second[second.length - 1].close;
-  const fFirst = first[first.length - 1].cumFlow, fSecond = second[second.length - 1].cumFlow;
-  const pDir = (pSecond - pFirst) / pFirst;
-  const fDir = fSecond - fFirst;
-
-  if (Math.abs(pDir) < 0.02) return null;
-  if (pDir > 0.02 && fDir < 0) return { type: 'bearish', message: `Bearish Divergence: 가격 +${(pDir*100).toFixed(1)}% 상승 중이나 fund flow 감소 — 스마트머니 이탈 가능성` };
-  if (pDir < -0.02 && fDir > 0) return { type: 'bullish', message: `Bullish Divergence: 가격 ${(pDir*100).toFixed(1)}% 하락 중이나 fund flow 증가 — 저가 매수 유입 가능성` };
+  const h = Math.floor(data.length / 2), f = data.slice(0, h), s = data.slice(h);
+  const pD = (s[s.length-1].close - f[f.length-1].close) / f[f.length-1].close;
+  const fD = s[s.length-1].cumFlow - f[f.length-1].cumFlow;
+  if (Math.abs(pD) < 0.02) return null;
+  if (pD > 0.02 && fD < 0) return { type: 'bearish', message: `Bearish Divergence: 가격 +${(pD*100).toFixed(1)}% 상승 중이나 fund flow 감소 — 스마트머니 이탈 가능성` };
+  if (pD < -0.02 && fD > 0) return { type: 'bullish', message: `Bullish Divergence: 가격 ${(pD*100).toFixed(1)}% 하락 중이나 fund flow 증가 — 저가 매수 유입 가능성` };
   return null;
 }
 
-// ===== RENDER =====
+// Render
 function renderCharts() {
   if (!allPriceData || !allPriceData.length) return;
+  let sliced = currentDays === 0 ? allPriceData : allPriceData.slice(-currentDays - 1);
+  const daily = calculateDailyFlow(sliced);
+  if (!daily.length) return;
+  const cum = cumulativeFlow(daily);
+  updateInfoBar(cum); updateDivergence(cum);
 
-  // 기간에 따라 데이터 슬라이스
-  let slicedPrice;
-  if (currentDays === 0) {
-    slicedPrice = allPriceData; // ALL
-  } else {
-    slicedPrice = allPriceData.slice(-currentDays - 1); // +1 for prev day calc
-  }
+  const wl = document.querySelector('.window-btn.active')?.textContent || '';
+  const labels = cum.map(d => d.date), prices = cum.map(d => d.close), flows = cum.map(d => d.dailyFlow);
+  const step = Math.max(1, Math.floor(labels.length / 40));
+  const dl = labels.map((l, i) => i % step === 0 ? l : '');
+  const tn = findTickerName(currentTicker);
 
-  // 일별 flow 계산
-  const dailyFlows = calculateDailyFlow(slicedPrice);
-  if (!dailyFlows.length) return;
-
-  // 누적 flow
-  const cumData = cumulativeFlow(dailyFlows);
-
-  updateInfoBar(cumData);
-  updateDivergence(cumData);
-
-  const windowLabel = document.querySelector('.window-btn.active')?.textContent || '';
-  const labels = cumData.map(d => d.date);
-  const prices = cumData.map(d => d.close);
-  const flows = cumData.map(d => d.dailyFlow);
-
-  // 날짜 라벨 간격
-  const maxLabels = 40;
-  const step = Math.max(1, Math.floor(labels.length / maxLabels));
-  const displayLabels = labels.map((l, i) => i % step === 0 ? l : '');
-
-  const tickerName = findTickerName(currentTicker);
-
-  // ---- Price Chart ----
-  document.getElementById('priceChartTitle').textContent = `${currentTicker} (${tickerName}) — 가격`;
+  document.getElementById('priceChartTitle').textContent = `${currentTicker} (${tn}) — 가격`;
   if (priceChart) priceChart.destroy();
   priceChart = new Chart(document.getElementById('priceChart').getContext('2d'), {
     type: 'line',
-    data: {
-      labels: displayLabels,
-      datasets: [{
-        data: prices, borderColor: '#22d3ee', borderWidth: 1.5,
-        pointRadius: 0, pointHoverRadius: 3, tension: 0, fill: false
-      }]
-    },
-    options: chartOptions(labels, v => '$' + v.toFixed(v >= 100 ? 0 : 2))
+    data: { labels: dl, datasets: [{ data: prices, borderColor: '#22d3ee', borderWidth: 1.5, pointRadius: 0, pointHoverRadius: 3, tension: 0, fill: false }] },
+    options: mkOpts(labels, v => '$' + v.toFixed(v >= 100 ? 0 : 2))
   });
 
-  // ---- Flow Chart (bar) ----
-  document.getElementById('flowChartTitle').textContent = `일별 Fund Flow — ${windowLabel} (백만$)`;
+  document.getElementById('flowChartTitle').textContent = `일별 Fund Flow — ${wl} (백만$)`;
   if (flowChart) flowChart.destroy();
   flowChart = new Chart(document.getElementById('flowChart').getContext('2d'), {
     type: 'bar',
-    data: {
-      labels: displayLabels,
-      datasets: [{
-        data: flows,
-        backgroundColor: flows.map(f => f >= 0 ? 'rgba(34,197,94,0.4)' : 'rgba(239,68,68,0.4)'),
-        borderColor: flows.map(f => f >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)'),
-        borderWidth: 1, barPercentage: 1.0, categoryPercentage: 1.0
-      }]
-    },
-    options: chartOptions(labels, v => (v >= 0 ? '+' : '') + v.toFixed(0) + 'M', true)
+    data: { labels: dl, datasets: [{ data: flows, backgroundColor: flows.map(f => f >= 0 ? 'rgba(34,197,94,0.4)' : 'rgba(239,68,68,0.4)'), borderColor: flows.map(f => f >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)'), borderWidth: 1, barPercentage: 1.0, categoryPercentage: 1.0 }] },
+    options: mkOpts(labels, v => (v >= 0 ? '+' : '') + v.toFixed(0) + 'M', true)
   });
 }
 
-function chartOptions(fullLabels, yCallback, isBar) {
+function mkOpts(fl, yCb, isBar) {
   return {
     responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        mode: 'index', intersect: false,
-        backgroundColor: '#18181b', titleColor: '#888', bodyColor: '#e8e8f0',
-        borderColor: '#333', borderWidth: 1,
-        titleFont: { family: "'JetBrains Mono'" }, bodyFont: { family: "'JetBrains Mono'" },
-        callbacks: {
-          title: (items) => fullLabels[items[0].dataIndex],
-          label: (item) => {
-            if (isBar) return `${item.raw >= 0 ? '+' : ''}${item.raw.toFixed(1)}M`;
-            return `$${item.raw.toFixed(2)}`;
-          }
-        }
-      }
-    },
-    scales: {
-      x: { grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, maxRotation: 0 } },
-      y: { position: 'right', grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, callback: yCallback } }
-    },
+    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, backgroundColor: '#18181b', titleColor: '#888', bodyColor: '#e8e8f0', borderColor: '#333', borderWidth: 1, titleFont: { family: "'JetBrains Mono'" }, bodyFont: { family: "'JetBrains Mono'" }, callbacks: { title: i => fl[i[0].dataIndex], label: i => isBar ? `${i.raw >= 0 ? '+' : ''}${i.raw.toFixed(1)}M` : `$${i.raw.toFixed(2)}` } } },
+    scales: { x: { grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, maxRotation: 0 } }, y: { position: 'right', grid: { color: '#1a1a1a', drawBorder: false }, ticks: { color: '#52525b', font: { family: "'JetBrains Mono'", size: 10 }, callback: yCb } } },
     interaction: { mode: 'index', intersect: false }
   };
 }
 
-// ===== HELPERS =====
+// Helpers
 function updateInfoBar(data) {
   if (!data || data.length < 2) return;
-  const last = data[data.length - 1], prev = data[data.length - 2], first = data[0];
-  const dc = last.close - prev.close, dcp = (dc / prev.close) * 100, s = dc >= 0 ? '+' : '';
-
-  document.getElementById('infoPrice').textContent = `$${last.close.toFixed(2)}`;
-  const dayEl = document.getElementById('infoDayChange');
-  dayEl.textContent = `${s}${dc.toFixed(2)} (${s}${dcp.toFixed(2)}%)`;
-  dayEl.className = `value ${dc >= 0 ? 'positive' : 'negative'}`;
-
-  // 구간 내 누적 flow
-  const totalFlow = last.cumFlow;
-  const fs = totalFlow >= 0 ? '+' : '';
-  const flowEl = document.getElementById('infoFlow');
-  flowEl.textContent = `${fs}${totalFlow.toFixed(1)}M`;
-  flowEl.className = `value ${totalFlow >= 0 ? 'positive' : 'negative'}`;
-
-  document.getElementById('infoRange').textContent = `${first.date} ~ ${last.date}`;
+  const l = data[data.length-1], p = data[data.length-2], f = data[0];
+  const dc = l.close - p.close, dp = (dc/p.close)*100, s = dc >= 0 ? '+' : '';
+  document.getElementById('infoPrice').textContent = `$${l.close.toFixed(2)}`;
+  const de = document.getElementById('infoDayChange'); de.textContent = `${s}${dc.toFixed(2)} (${s}${dp.toFixed(2)}%)`; de.className = `value ${dc >= 0 ? 'positive' : 'negative'}`;
+  const fe = document.getElementById('infoFlow'), fs = l.cumFlow >= 0 ? '+' : ''; fe.textContent = `${fs}${l.cumFlow.toFixed(1)}M`; fe.className = `value ${l.cumFlow >= 0 ? 'positive' : 'negative'}`;
+  document.getElementById('infoRange').textContent = `${f.date} ~ ${l.date}`;
 }
 
 function updateDivergence(data) {
-  const alert = document.getElementById('divergenceAlert');
-  const div = detectDivergence(data);
-  if (div) {
-    alert.className = `divergence-alert ${div.type}`;
-    document.getElementById('divergenceText').textContent = div.message;
-  } else {
-    alert.className = 'divergence-alert';
-  }
+  const a = document.getElementById('divergenceAlert'), d = detectDivergence(data);
+  if (d) { a.className = `divergence-alert ${d.type}`; document.getElementById('divergenceText').textContent = d.message; } else { a.className = 'divergence-alert'; }
 }
 
-function findTickerName(ticker) {
-  for (const tickers of Object.values(ETF_LIST)) { if (tickers[ticker]) return tickers[ticker]; }
-  return ticker;
-}
+function findTickerName(t) { for (const v of Object.values(ETF_LIST)) { if (v[t]) return v[t]; } return t; }
 </script>
 </body>
 </html>
