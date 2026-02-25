@@ -81,23 +81,6 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
 .share-btn.copy:hover { color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
 /* Accordion */
-.accordion { margin-top: 24px; }
-.accordion-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-.accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; transition: background 0.15s; user-select: none; }
-.accordion-header:hover { background: var(--bg-hover); }
-.accordion-header h3 { font-size: 14px; font-weight: 500; color: var(--text-primary); }
-.accordion-arrow { font-size: 12px; color: var(--text-muted); transition: transform 0.25s; }
-.accordion-item.open .accordion-arrow { transform: rotate(180deg); }
-.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-.accordion-item.open .accordion-body { max-height: 2000px; }
-.accordion-content { padding: 0 16px 16px; font-size: 13px; line-height: 1.8; color: var(--text-secondary); }
-.accordion-content strong { color: var(--text-primary); }
-.signal-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-.signal-table th, .signal-table td { padding: 8px 12px; border: 1px solid var(--border); text-align: center; }
-.signal-table th { background: var(--bg-hover); color: var(--text-primary); font-weight: 600; }
-.signal-table .green { color: var(--accent-green); }
-.signal-table .red { color: var(--accent-red); }
-.signal-table .yellow { color: #fbbf24; }
 
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px; z-index: 9999; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
@@ -112,8 +95,6 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
   .chart-wrapper { height: 220px; }
   .share-group { flex-wrap: wrap; }
   .share-btn { font-size: 11px; padding: 6px 10px; }
-  .signal-table { font-size: 10px; }
-  .signal-table th, .signal-table td { padding: 6px 4px; }
 }
 </style>
 </head>
@@ -180,83 +161,6 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
   </div>
 
   <!-- Accordion Guide -->
-  <div class="accordion">
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>Fund Flow란?</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        Fund Flow는 ETF로 유입되거나 유출되는 자금의 흐름을 나타냅니다. ETF는 주식과 달리 Authorized Participant(AP)가 creation(생성)과 redemption(환매)을 통해 주식 수를 늘리거나 줄일 수 있어, 자금 흐름을 추적할 수 있습니다.<br><br>
-        <strong>유입(Inflow):</strong> 투자자들이 해당 ETF에 돈을 넣고 있다는 뜻입니다. AP가 기초자산을 사서 ETF 주식을 새로 만듭니다.<br>
-        <strong>유출(Outflow):</strong> 투자자들이 돈을 빼고 있다는 뜻입니다. AP가 ETF 주식을 해체해서 기초자산을 매도합니다.<br><br>
-        이 대시보드는 <strong>Volume × Price Direction</strong>으로 일별 자금 흐름을 추정합니다. 가격이 오른 날의 거래대금은 유입, 내린 날의 거래대금은 유출로 계산합니다.
-      </div></div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>차트 패턴 해석법</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        가격과 fund flow의 방향 조합에 따라 시장 상황을 해석할 수 있습니다.
-        <table class="signal-table">
-          <tr><th>가격</th><th>Fund Flow</th><th>해석</th><th>시그널</th></tr>
-          <tr><td class="green">↑ 상승</td><td class="green">↑ 유입</td><td>자금이 들어오며 가격도 상승</td><td class="green">건강한 상승</td></tr>
-          <tr><td class="green">↑ 상승</td><td class="red">↓ 유출</td><td>가격은 오르나 스마트머니 이탈</td><td class="red">위험 경고</td></tr>
-          <tr><td class="red">↓ 하락</td><td class="green">↑ 유입</td><td>하락 중 저가 매수 자금 유입</td><td class="yellow">바닥 탐색</td></tr>
-          <tr><td class="red">↓ 하락</td><td class="red">↓ 유출</td><td>투매 + 자금 이탈 동시 발생</td><td class="red">항복 매도</td></tr>
-        </table>
-        <strong>Divergence(괴리)</strong>가 가장 중요한 시그널입니다. 가격과 fund flow 방향이 반대일 때 대시보드 상단에 자동으로 알림이 표시됩니다.
-      </div></div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>유입/유출이 동시에 클 때</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        하락 구간에서 초록 막대(유입)와 빨간 막대(유출)가 모두 크게 나타나는 경우가 있습니다. 이는 <strong>시장 참여자 간 의견이 극단적으로 갈리는 "양극화" 구간</strong>입니다.<br><br>
-        <strong>매도 세력:</strong> 기존 보유자의 손절, 기관의 포지션 정리<br>
-        <strong>매수 세력:</strong> 저가 매수를 노리는 신규 자금 유입<br><br>
-        이때 핵심은 <strong>"누가 이기고 있는가"</strong>입니다. Info bar의 "구간 내 Fund Flow" 값이 음수라면 유출이 우세, 양수라면 유입이 우세합니다.<br><br>
-        <strong>바닥 신호:</strong> 빨간 막대가 점점 작아지면서 초록 막대가 유지되면 매도 압력이 소진되고 있다는 뜻으로, 바닥 근처일 가능성이 있습니다.<br>
-        <strong>추가 하락 경고:</strong> 초록 막대 후 더 큰 빨간 막대가 반복되면, 저가 매수자들도 손절하는 단계로 아직 항복(capitulation)이 끝나지 않았음을 시사합니다.
-      </div></div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>기간 탭 활용법</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        기간 탭은 차트에 표시되는 데이터 범위를 조절합니다.<br><br>
-        <strong>2주 / 1개월:</strong> 단기 트레이딩 관점. 최근 며칠간의 급격한 유입/유출 변화를 포착합니다. 이벤트(실적 발표, FOMC 등) 전후 자금 흐름 확인에 유용합니다.<br>
-        <strong>3개월 / 6개월:</strong> 스윙 트레이딩 및 중기 추세 분석. 섹터 로테이션이나 테마 전환의 초기 징후를 발견할 수 있습니다.<br>
-        <strong>1년 / 3년:</strong> 장기 투자 관점. 대형 사이클의 자금 흐름 패턴을 파악하고, 현재 위치가 사이클 어디쯤인지 가늠할 수 있습니다.<br>
-        <strong>5년 / ALL:</strong> 거시적 관점. 코로나 폭락(2020), 금리 인상기(2022) 등 역사적 이벤트와 현재 상황을 비교하는 데 활용합니다.<br><br>
-        <strong>팁:</strong> 같은 ETF를 단기(2주)와 장기(1년)로 번갈아 보면, 단기 노이즈와 장기 추세를 분리해서 판단할 수 있습니다.
-      </div></div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>ETF 유형별 해석 차이</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        <strong>대형 인덱스 ETF (SPY, QQQ, DIA):</strong> 거래량이 많아 fund flow 추정의 신뢰도가 높습니다. 시장 전체 센티먼트를 대표하며, 기관 자금 흐름이 잘 반영됩니다.<br><br>
-        <strong>섹터 ETF (XLF, XLE, SMH 등):</strong> 섹터 로테이션을 포착하는 데 유용합니다. 특정 섹터에만 자금이 몰리거나 빠지면 시장 테마 전환의 신호일 수 있습니다.<br><br>
-        <strong>커머디티 ETF (GLD, SLV, USO):</strong> 실물 자산 연동 ETF는 creation/redemption이 직접적으로 기초자산 매매와 연결되어 fund flow의 의미가 가장 직관적입니다. GLD 유입 = 실제 금 매수.<br><br>
-        <strong>채권 ETF (TLT, HYG):</strong> 금리 전환기에 특히 중요합니다. TLT 유입 증가는 시장이 금리 하락(안전자산 선호)을 예상하고 있다는 뜻일 수 있습니다.<br><br>
-        <strong>변동성 ETF (VXX, UVXY):</strong> 레버리지 특성상 거래량 변동이 크고 노이즈가 많습니다. 방향성보다는 극단적 스파이크에 주목하세요.<br><br>
-        <strong>유의사항:</strong> 이 대시보드의 fund flow는 거래량 기반 추정치이며, 실제 creation/redemption 데이터와 다를 수 있습니다. 투자 판단의 보조 도구로 활용하시고, 단독 매매 신호로 사용하지 마세요.
-      </div></div>
-    </div>
-  </div>
 
   <div class="footer">Herdvibe.com · ETF Fund Flow Tracker · Data from Yahoo Finance</div>
 </div>
@@ -292,11 +196,6 @@ Chart.register(watermarkPlugin);
 
 let currentTicker = 'SPY', currentDays = 63, allPriceData = null, priceChart = null, flowChart = null;
 
-// Accordion
-function toggleAccordion(header) {
-  const item = header.parentElement;
-  item.classList.toggle('open');
-}
 
 // Share
 function openUrl(url) {
