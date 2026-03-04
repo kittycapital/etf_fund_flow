@@ -70,16 +70,19 @@ def update_price_data(ticker, lookback_days=5):
         return False
 
 
-def fetch_ishares_shares(ticker):
-    """
-    iShares 공식 CSV에서 Shares Outstanding + NAV 히스토리 가져오기
+def _parse_num(s):
+    """콤마/공백 제거 후 float 변환"""
+    try:
+        return float(str(s).replace(",", "").strip())
+    except Exception:
+        return None
 
-    iShares CSV 구조:
-      - 상단 N줄: 펀드명, ISIN, 설정일 등 메타데이터 (컬럼 수 불규칙)
-      - 실제 데이터 헤더 행: "As Of Date", "Fund Name", "Shares Outstanding", "NAV", ...
-      - 이후: 날짜별 데이터 행
-    → pandas가 메타데이터 행에서 컬럼 수 불일치로 파싱 실패하므로
-      헤더 행 위치를 먼저 찾고 그 행부터 파싱
+
+def fetch_ishares_nav_history(ticker):
+    """
+    iShares NAV 히스토리 엔드포인트 시도 (dataType=nav)
+    성공 시 DataFrame(index=Date, columns=[shares_outstanding, nav]) 반환
+    실패 시 None 반환
     """
     product_id = ISHARES_PRODUCT_IDS.get(ticker)
     slug = ISHARES_SLUGS.get(ticker)
@@ -88,76 +91,114 @@ def fetch_ishares_shares(ticker):
 
     url = (
         f"https://www.ishares.com/us/products/{product_id}/{slug}"
-        f"/1467271812596.ajax?fileType=csv&fileName={ticker}_fund&dataType=fund"
+        f"/1467271812596.ajax?fileType=csv&fileName={ticker}_nav&dataType=nav"
     )
-
     try:
         resp = requests.get(url, headers=HEADERS, timeout=30)
         resp.raise_for_status()
-
         lines = resp.text.splitlines()
 
-        # ── Step 1: 실제 데이터 헤더 행 찾기
-        # "Shares Outstanding" 또는 "As Of" 가 포함된 첫 번째 행
+        # 날짜 + 숫자 컬럼이 여러 개인 실제 데이터 행 찾기
         header_row = None
         for i, line in enumerate(lines):
-            if "shares outstanding" in line.lower() or (
-                "as of" in line.lower() and "nav" in line.lower()
-            ):
+            cols = line.count(",")
+            # 헤더 후보: 컬럼 3개 이상 & 날짜처럼 보이지 않는 텍스트
+            if cols >= 2 and any(kw in line.lower() for kw in ["date", "nav", "shares"]):
                 header_row = i
                 break
 
         if header_row is None:
-            # fallback: 컬럼이 5개 이상인 첫 번째 행
-            for i, line in enumerate(lines):
-                if line.count(",") >= 4:
-                    header_row = i
-                    break
-
-        if header_row is None:
-            print(f"  ⚠️  {ticker}: 헤더 행을 찾을 수 없음")
             return None
 
-        # ── Step 2: 헤더 행부터만 파싱 (메타데이터 행 완전 스킵)
         csv_text = "\n".join(lines[header_row:])
-        df = pd.read_csv(
-            io.StringIO(csv_text),
-            on_bad_lines="skip",   # 컬럼 수 불일치 행 무시
-            thousands=",",         # 숫자에 콤마 포함된 경우 처리
-        )
+        df = pd.read_csv(io.StringIO(csv_text), on_bad_lines="skip", thousands=",")
         df.columns = [str(c).strip() for c in df.columns]
 
-        # ── Step 3: 필요한 컬럼 찾기
-        date_col   = next((c for c in df.columns if "as of" in c.lower() or c.lower() == "date"), None)
-        shares_col = next((c for c in df.columns if "shares outstanding" in c.lower()), None)
+        date_col   = next((c for c in df.columns if "date" in c.lower()), None)
+        shares_col = next((c for c in df.columns if "shares" in c.lower()), None)
         nav_col    = next((c for c in df.columns if c.strip().upper() == "NAV"), None)
 
         if not date_col or not shares_col:
-            print(f"  ⚠️  {ticker}: 필수 컬럼 없음. 컬럼 목록: {df.columns.tolist()[:10]}")
             return None
 
-        # ── Step 4: 정리 및 반환
         keep = [date_col, shares_col] + ([nav_col] if nav_col else [])
         result = df[keep].copy()
         result.columns = ["Date", "shares_outstanding"] + (["nav"] if nav_col else [])
-
-        # 숫자 정리 (콤마, 공백 제거)
-        result["shares_outstanding"] = (
-            result["shares_outstanding"]
-            .astype(str).str.replace(",", "").str.strip()
-        )
-        result = result[result["shares_outstanding"].str.match(r"^\d+\.?\d*$")]
-        result["shares_outstanding"] = result["shares_outstanding"].astype(float)
-
+        result["shares_outstanding"] = result["shares_outstanding"].apply(_parse_num)
         result["Date"] = pd.to_datetime(result["Date"], errors="coerce").dt.strftime("%Y-%m-%d")
         result = result.dropna(subset=["Date", "shares_outstanding"])
         result = result.set_index("Date").sort_index()
 
-        return result
+        if len(result) > 1:   # 히스토리가 있어야 의미 있음
+            return result
+        return None
+
+    except Exception:
+        return None
+
+
+def fetch_ishares_snapshot(ticker):
+    """
+    iShares fund 요약 CSV (dataType=fund) 에서 오늘 Shares Outstanding 파싱
+    → key-value 포맷: "Shares Outstanding","38,350,000.00"
+    성공 시 (shares_float, nav_float_or_None) 튜플 반환
+    """
+    product_id = ISHARES_PRODUCT_IDS.get(ticker)
+    slug = ISHARES_SLUGS.get(ticker)
+    if not product_id or not slug:
+        return None, None
+
+    url = (
+        f"https://www.ishares.com/us/products/{product_id}/{slug}"
+        f"/1467271812596.ajax?fileType=csv&fileName={ticker}_fund&dataType=fund"
+    )
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=30)
+        resp.raise_for_status()
+
+        # key-value 파싱
+        kv = {}
+        for line in resp.text.splitlines():
+            parts = line.split(",", 1)
+            if len(parts) == 2:
+                key = parts[0].strip().strip('"').lower()
+                val = parts[1].strip().strip('"')
+                kv[key] = val
+
+        shares = _parse_num(kv.get("shares outstanding", ""))
+        nav    = _parse_num(kv.get("nav", ""))
+        return shares, nav
 
     except Exception as e:
-        print(f"  ❌ {ticker} iShares fetch 실패: {e}")
-        return None
+        print(f"  ❌ {ticker} iShares snapshot 실패: {e}")
+        return None, None
+
+
+def fetch_ishares_shares(ticker):
+    """
+    iShares 공식 데이터 취득 (두 단계 시도)
+    1순위: NAV 히스토리 엔드포인트 → 전체 시계열 반환
+    2순위: fund 요약 엔드포인트  → 오늘 날짜 스냅샷 1행 반환
+    """
+    # ── 1순위: 히스토리 시도
+    hist = fetch_ishares_nav_history(ticker)
+    if hist is not None and not hist.empty:
+        print(f"       → 히스토리 {len(hist)}행 취득")
+        return hist
+
+    # ── 2순위: 오늘 스냅샷
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    shares, nav = fetch_ishares_snapshot(ticker)
+    if shares:
+        row = {"shares_outstanding": shares}
+        if nav:
+            row["nav"] = nav
+        result = pd.DataFrame(row, index=[today])
+        result.index.name = "Date"
+        print(f"       → 오늘 스냅샷 취득 (shares={shares:,.0f})")
+        return result
+
+    return None
 
 
 def update_ishares_data(ticker):
