@@ -141,37 +141,52 @@ def fetch_ishares_snapshot(ticker):
     """
     iShares fund 요약 CSV (dataType=fund) 에서 오늘 Shares Outstanding 파싱
     → key-value 포맷: "Shares Outstanding","38,350,000.00"
-    성공 시 (shares_float, nav_float_or_None) 튜플 반환
+    SLV 같은 Trust 구조는 여러 URL 패턴 시도 후 yfinance fallback
     """
     product_id = ISHARES_PRODUCT_IDS.get(ticker)
     slug = ISHARES_SLUGS.get(ticker)
     if not product_id or not slug:
         return None, None
 
-    url = (
-        f"https://www.ishares.com/us/products/{product_id}/{slug}"
-        f"/1467271812596.ajax?fileType=csv&fileName={ticker}_fund&dataType=fund"
-    )
+    # Trust 구조(SLV 등)를 포함해 여러 URL 패턴 순서대로 시도
+    urls = [
+        f"https://www.ishares.com/us/products/{product_id}/{slug}/1467271812596.ajax?fileType=csv&fileName={ticker}_fund&dataType=fund",
+        f"https://www.ishares.com/us/products/{product_id}/{slug}/1467271812596.ajax?fileType=csv&dataType=fund",
+        f"https://www.ishares.com/us/products/{product_id}/{slug}/1467271812596.ajax?fileType=csv&fileName={ticker}_trust&dataType=fund",
+    ]
+
+    for url in urls:
+        try:
+            resp = requests.get(url, headers=HEADERS, timeout=30)
+            if resp.status_code != 200 or len(resp.text.strip()) < 10:
+                continue
+
+            kv = {}
+            for line in resp.text.splitlines():
+                parts = line.split(",", 1)
+                if len(parts) == 2:
+                    key = parts[0].strip().strip('"').lower()
+                    val = parts[1].strip().strip('"')
+                    kv[key] = val
+
+            shares = _parse_num(kv.get("shares outstanding", ""))
+            nav    = _parse_num(kv.get("nav", ""))
+            if shares:
+                return shares, nav
+        except Exception:
+            continue
+
+    # 마지막 fallback: yfinance (공식 아님, 하지만 데이터 공백 방지)
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=30)
-        resp.raise_for_status()
+        shares = yf.Ticker(ticker).info.get("sharesOutstanding", None)
+        if shares:
+            print(f"       → {ticker}: iShares 실패, yfinance fallback (shares={shares:,.0f})")
+            return float(shares), None
+    except Exception:
+        pass
 
-        # key-value 파싱
-        kv = {}
-        for line in resp.text.splitlines():
-            parts = line.split(",", 1)
-            if len(parts) == 2:
-                key = parts[0].strip().strip('"').lower()
-                val = parts[1].strip().strip('"')
-                kv[key] = val
-
-        shares = _parse_num(kv.get("shares outstanding", ""))
-        nav    = _parse_num(kv.get("nav", ""))
-        return shares, nav
-
-    except Exception as e:
-        print(f"  ❌ {ticker} iShares snapshot 실패: {e}")
-        return None, None
+    print(f"  ⚠️  {ticker}: 모든 방법 실패")
+    return None, None
 
 
 def fetch_ishares_shares(ticker):
