@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ETF 자금 유입 트래커 | HerdVibe</title>
-<meta property="og:title" content="ETF 자금 유입 트래커 | HerdVibe">
-<meta property="og:description" content="ETF 자금 유출입 추정 및 Divergence 감지 대시보드">
+<title>ETF 자금 레이더 | HerdVibe</title>
+<meta property="og:title" content="ETF 자금 레이더 | HerdVibe">
+<meta property="og:description" content="ETF 실시간 자금 흐름 추적 대시보드">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,6 +82,12 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
 
 /* Accordion */
 
+/* 공식/추정 배지 */
+.badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: 3px; vertical-align: middle; margin-left: 4px; letter-spacing: 0.3px; }
+.badge-official { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.badge-estimated { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+.chart-title .badge { font-size: 10px; padding: 2px 6px; }
+
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px; z-index: 9999; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
@@ -101,7 +107,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
 <body>
 <div class="container">
   <div class="header">
-    <h1>ETF 자금 유입 트래커</h1>
+    <h1>ETF 자금 레이더</h1>
     <div class="subtitle" id="lastUpdated">Loading...</div>
   </div>
 
@@ -162,21 +168,66 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
 
   <!-- Accordion Guide -->
 
-  <div class="footer">Herdvibe.com · ETF Fund Flow Tracker · Data from Yahoo Finance</div>
+  <div class="footer">Herdvibe.com · ETF 자금 레이더 · <span style="color:#22c55e">공식</span>: iShares 발행사 데이터 &nbsp;|&nbsp; <span style="color:#fbbf24">추정</span>: 거래량 기반 추정치</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 const SHARE_URL = 'https://herdvibe.com/92';
+// official: true = iShares 공식 Shares Outstanding 데이터
+// official: false = Volume × Price Direction 추정치
 const ETF_LIST = {
-  "미국 대표 지수": { SPY: "S&P 500", QQQ: "나스닥 100", DIA: "다우", IWM: "러셀 2000" },
-  "섹터": { XLF: "금융", XLE: "에너지", XLK: "기술", XLV: "헬스케어", IGV: "소프트웨어", SMH: "반도체", SOXX: "반도체", XBI: "바이오", ITB: "주택건설" },
-  "테마/성장": { ARKK: "혁신", HACK: "사이버보안", TAN: "태양광", LIT: "리튬/배터리", BOTZ: "로봇/AI" },
-  "커머디티": { GLD: "금", SLV: "은", USO: "원유", UNG: "천연가스", COPX: "구리", WEAT: "밀" },
-  "채권": { TLT: "미국 장기채", HYG: "하이일드", LQD: "투자등급 회사채", EMB: "신흥국 채권" },
-  "국가/지역": { EEM: "신흥국", FXI: "중국", EWJ: "일본", EWY: "한국", EWZ: "브라질", INDA: "인도" },
-  "변동성/헷지": { VXX: "VIX", UVXY: "VIX 2배" }
+  "미국 대표 지수": {
+    SPY:  { name_kr: "S&P 500",     official: false },
+    QQQ:  { name_kr: "나스닥 100",  official: false },
+    DIA:  { name_kr: "다우",         official: false },
+    IWM:  { name_kr: "러셀 2000",   official: true  },
+  },
+  "섹터": {
+    XLF:  { name_kr: "금융",         official: false },
+    XLE:  { name_kr: "에너지",       official: false },
+    XLK:  { name_kr: "기술",         official: false },
+    XLV:  { name_kr: "헬스케어",     official: false },
+    IGV:  { name_kr: "소프트웨어",   official: true  },
+    SMH:  { name_kr: "반도체",       official: false },
+    SOXX: { name_kr: "반도체",       official: true  },
+    XBI:  { name_kr: "바이오",       official: false },
+    ITB:  { name_kr: "주택건설",     official: false },
+  },
+  "테마/성장": {
+    ARKK: { name_kr: "혁신",         official: false },
+    HACK: { name_kr: "사이버보안",   official: false },
+    TAN:  { name_kr: "태양광",       official: false },
+    LIT:  { name_kr: "리튬/배터리",  official: false },
+    BOTZ: { name_kr: "로봇/AI",      official: false },
+  },
+  "커머디티": {
+    GLD:  { name_kr: "금",           official: false },
+    SLV:  { name_kr: "은",           official: true  },
+    USO:  { name_kr: "원유",         official: false },
+    UNG:  { name_kr: "천연가스",     official: false },
+    COPX: { name_kr: "구리",         official: false },
+    WEAT: { name_kr: "밀",           official: false },
+  },
+  "채권": {
+    TLT:  { name_kr: "미국 장기채",  official: true  },
+    HYG:  { name_kr: "하이일드",     official: true  },
+    LQD:  { name_kr: "투자등급 회사채", official: true },
+    EMB:  { name_kr: "신흥국 채권",  official: true  },
+  },
+  "국가/지역": {
+    EEM:  { name_kr: "신흥국",       official: true  },
+    FXI:  { name_kr: "중국",         official: true  },
+    EWJ:  { name_kr: "일본",         official: true  },
+    EWY:  { name_kr: "한국",         official: true  },
+    EWZ:  { name_kr: "브라질",       official: true  },
+    INDA: { name_kr: "인도",         official: true  },
+  },
+  "변동성/헷지": {
+    VXX:  { name_kr: "VIX",          official: false },
+    UVXY: { name_kr: "VIX 2배",      official: false },
+  },
 };
 
 const watermarkPlugin = {
@@ -207,7 +258,7 @@ function doCopy(text) {
   try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:0;top:0;opacity:0;width:1px;height:1px;'; document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, ta.value.length); document.execCommand('copy'); document.body.removeChild(ta); } catch(e) { window.prompt('아래 링크를 복사하세요:', text); }
 }
 function doShare(platform) {
-  const t = `${currentTicker} (${findTickerName(currentTicker)}) ETF 자금 유입 트래커 - Herdvibe`;
+  const t = `${currentTicker} (${findTickerName(currentTicker)}) ETF 자금 레이더 - Herdvibe`;
   switch(platform) {
     case 'twitter': openUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(SHARE_URL)}`); break;
     case 'kakao': openUrl(`https://story.kakao.com/share?url=${encodeURIComponent(SHARE_URL)}`); break;
@@ -238,13 +289,25 @@ function initControls() {
 
 function populateTickers(category) {
   const sel = document.getElementById('tickerSelect'); sel.innerHTML = '';
+  const makeBadge = (official) => official ? ' [공식]' : ' [추정]';
   if (category === 'all') {
     for (const [cat, tickers] of Object.entries(ETF_LIST)) {
       const g = document.createElement('optgroup'); g.label = cat;
-      for (const [t, n] of Object.entries(tickers)) { const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`; if (t === currentTicker) o.selected = true; g.appendChild(o); }
+      for (const [t, info] of Object.entries(tickers)) {
+        const o = document.createElement('option'); o.value = t;
+        o.textContent = `${t} — ${info.name_kr}${makeBadge(info.official)}`;
+        if (t === currentTicker) o.selected = true;
+        g.appendChild(o);
+      }
       sel.appendChild(g);
     }
-  } else { for (const [t, n] of Object.entries(ETF_LIST[category] || {})) { const o = document.createElement('option'); o.value = t; o.textContent = `${t} — ${n}`; sel.appendChild(o); } }
+  } else {
+    for (const [t, info] of Object.entries(ETF_LIST[category] || {})) {
+      const o = document.createElement('option'); o.value = t;
+      o.textContent = `${t} — ${info.name_kr}${makeBadge(info.official)}`;
+      sel.appendChild(o);
+    }
+  }
 }
 
 // Data
@@ -296,8 +359,12 @@ function renderCharts() {
   const step = Math.max(1, Math.floor(labels.length / 40));
   const dl = labels.map((l, i) => i % step === 0 ? l : '');
   const tn = findTickerName(currentTicker);
+  const official = isOfficial(currentTicker);
+  const badgeHtml = official
+    ? '<span class="badge badge-official">공식</span>'
+    : '<span class="badge badge-estimated">추정</span>';
 
-  document.getElementById('priceChartTitle').textContent = `${currentTicker} (${tn}) — 가격`;
+  document.getElementById('priceChartTitle').innerHTML = `${currentTicker} (${tn}) — 가격 ${badgeHtml}`;
   if (priceChart) priceChart.destroy();
   priceChart = new Chart(document.getElementById('priceChart').getContext('2d'), {
     type: 'line',
@@ -305,7 +372,7 @@ function renderCharts() {
     options: mkOpts(labels, v => '$' + v.toFixed(v >= 100 ? 0 : 2))
   });
 
-  document.getElementById('flowChartTitle').textContent = `일별 Fund Flow — ${wl} (백만$)`;
+  document.getElementById('flowChartTitle').innerHTML = `일별 Fund Flow — ${wl} (백만$) ${badgeHtml}`;
   if (flowChart) flowChart.destroy();
   flowChart = new Chart(document.getElementById('flowChart').getContext('2d'), {
     type: 'bar',
@@ -339,7 +406,9 @@ function updateDivergence(data) {
   if (d) { a.className = `divergence-alert ${d.type}`; document.getElementById('divergenceText').textContent = d.message; } else { a.className = 'divergence-alert'; }
 }
 
-function findTickerName(t) { for (const v of Object.values(ETF_LIST)) { if (v[t]) return v[t]; } return t; }
+function findTickerInfo(t) { for (const v of Object.values(ETF_LIST)) { if (v[t]) return v[t]; } return { name_kr: t, official: false }; }
+function findTickerName(t) { return findTickerInfo(t).name_kr; }
+function isOfficial(t) { return findTickerInfo(t).official; }
 </script>
 </body>
 </html>
