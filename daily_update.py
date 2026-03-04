@@ -71,7 +71,16 @@ def update_price_data(ticker, lookback_days=5):
 
 
 def fetch_ishares_shares(ticker):
-    """iShares 공식 CSV에서 Shares Outstanding + NAV 히스토리 가져오기"""
+    """
+    iShares 공식 CSV에서 Shares Outstanding + NAV 히스토리 가져오기
+
+    iShares CSV 구조:
+      - 상단 N줄: 펀드명, ISIN, 설정일 등 메타데이터 (컬럼 수 불규칙)
+      - 실제 데이터 헤더 행: "As Of Date", "Fund Name", "Shares Outstanding", "NAV", ...
+      - 이후: 날짜별 데이터 행
+    → pandas가 메타데이터 행에서 컬럼 수 불일치로 파싱 실패하므로
+      헤더 행 위치를 먼저 찾고 그 행부터 파싱
+    """
     product_id = ISHARES_PRODUCT_IDS.get(ticker)
     slug = ISHARES_SLUGS.get(ticker)
     if not product_id or not slug:
@@ -86,31 +95,64 @@ def fetch_ishares_shares(ticker):
         resp = requests.get(url, headers=HEADERS, timeout=30)
         resp.raise_for_status()
 
-        # iShares CSV는 앞에 메타 헤더가 있어서 실제 데이터 시작 행 찾기
         lines = resp.text.splitlines()
-        data_start = 0
+
+        # ── Step 1: 실제 데이터 헤더 행 찾기
+        # "Shares Outstanding" 또는 "As Of" 가 포함된 첫 번째 행
+        header_row = None
         for i, line in enumerate(lines):
-            if line.startswith("As Of") or line.startswith("Date"):
-                data_start = i
+            if "shares outstanding" in line.lower() or (
+                "as of" in line.lower() and "nav" in line.lower()
+            ):
+                header_row = i
                 break
 
-        csv_text = "\n".join(lines[data_start:])
-        df = pd.read_csv(io.StringIO(csv_text))
-        df.columns = [c.strip() for c in df.columns]
+        if header_row is None:
+            # fallback: 컬럼이 5개 이상인 첫 번째 행
+            for i, line in enumerate(lines):
+                if line.count(",") >= 4:
+                    header_row = i
+                    break
 
-        date_col   = next((c for c in df.columns if "date" in c.lower() or "as of" in c.lower()), None)
-        shares_col = next((c for c in df.columns if "shares" in c.lower() and "outstanding" in c.lower()), None)
-        nav_col    = next((c for c in df.columns if c.upper() == "NAV" or "nav" in c.lower()), None)
-
-        if not date_col or not shares_col:
-            print(f"  ⚠️  {ticker}: 컬럼 파싱 실패 {df.columns.tolist()}")
+        if header_row is None:
+            print(f"  ⚠️  {ticker}: 헤더 행을 찾을 수 없음")
             return None
 
-        cols = [date_col, shares_col] + ([nav_col] if nav_col else [])
-        result = df[cols].copy()
+        # ── Step 2: 헤더 행부터만 파싱 (메타데이터 행 완전 스킵)
+        csv_text = "\n".join(lines[header_row:])
+        df = pd.read_csv(
+            io.StringIO(csv_text),
+            on_bad_lines="skip",   # 컬럼 수 불일치 행 무시
+            thousands=",",         # 숫자에 콤마 포함된 경우 처리
+        )
+        df.columns = [str(c).strip() for c in df.columns]
+
+        # ── Step 3: 필요한 컬럼 찾기
+        date_col   = next((c for c in df.columns if "as of" in c.lower() or c.lower() == "date"), None)
+        shares_col = next((c for c in df.columns if "shares outstanding" in c.lower()), None)
+        nav_col    = next((c for c in df.columns if c.strip().upper() == "NAV"), None)
+
+        if not date_col or not shares_col:
+            print(f"  ⚠️  {ticker}: 필수 컬럼 없음. 컬럼 목록: {df.columns.tolist()[:10]}")
+            return None
+
+        # ── Step 4: 정리 및 반환
+        keep = [date_col, shares_col] + ([nav_col] if nav_col else [])
+        result = df[keep].copy()
         result.columns = ["Date", "shares_outstanding"] + (["nav"] if nav_col else [])
-        result["Date"] = pd.to_datetime(result["Date"]).dt.strftime("%Y-%m-%d")
-        result = result.dropna(subset=["shares_outstanding"]).set_index("Date").sort_index()
+
+        # 숫자 정리 (콤마, 공백 제거)
+        result["shares_outstanding"] = (
+            result["shares_outstanding"]
+            .astype(str).str.replace(",", "").str.strip()
+        )
+        result = result[result["shares_outstanding"].str.match(r"^\d+\.?\d*$")]
+        result["shares_outstanding"] = result["shares_outstanding"].astype(float)
+
+        result["Date"] = pd.to_datetime(result["Date"], errors="coerce").dt.strftime("%Y-%m-%d")
+        result = result.dropna(subset=["Date", "shares_outstanding"])
+        result = result.set_index("Date").sort_index()
+
         return result
 
     except Exception as e:
